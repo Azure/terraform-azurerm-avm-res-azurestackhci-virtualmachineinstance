@@ -3,7 +3,7 @@ resource "azapi_resource" "nic" {
   body = {
     extendedLocation = {
       type = "CustomLocation"
-      name = var.customLocationId
+      name = var.custom_location_id
     }
 
     properties = {
@@ -11,14 +11,14 @@ resource "azapi_resource" "nic" {
         name = null
         properties = {
           subnet = {
-            id = var.logicalNetworkId
+            id = var.logical_network_id
           }
-          privateIPAddress = var.privateIPAddress == "" ? null : var.privateIPAddress
+          private_ip_address = var.private_ip_address == "" ? null : var.private_ip_address
         }
       }]
     }
   }
   location  = var.location
-  name      = "${var.vmName}-nic"
+  name      = "${var.name}-nic"
   parent_id = data.azurerm_resource_group.rg.id
 }

@@ -31,7 +31,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
     kind = "HCI",
   }
   location  = var.location
-  name      = var.vmName
+  name      = var.name
   parent_id = data.azurerm_resource_group.rg.id
 
   identity {
@@ -44,23 +44,23 @@ resource "azapi_resource" "virtual_machine" {
   body = {
     extendedLocation = {
       type = "CustomLocation"
-      name = var.customLocationId
+      name = var.custom_location_id
     }
     properties = {
       hardwareProfile = {
         vmSize     = "Custom"
-        processors = var.vCPUCount
-        memoryMB   = var.memoryMB
-        dynamicMemoryConfig = var.dynamicMemory ? null : {
-          maximumMemoryMB    = var.dynamicMemoryMax
-          minimumMemoryMB    = var.dynamicMemoryMin
-          targetMemoryBuffer = var.dynamicMemoryBuffer
+        processors = var.v_cpu_count
+        memory_mb  = var.memory_mb
+        dynamicMemoryConfig = var.dynamic_memory ? null : {
+          maximumMemoryMB    = var.dynamic_memory_max
+          minimumMemoryMB    = var.dynamic_memory_min
+          targetMemoryBuffer = var.dynamic_memory_buffer
         }
       }
       osProfile = {
-        adminUsername = var.adminUsername
-        adminPassword = var.adminPassword
-        computerName  = var.vmName
+        admin_username = var.admin_username
+        admin_password = var.admin_password
+        computerName   = var.name
         windowsConfiguration = {
           provisionVMAgent       = true
           provisionVMConfigAgent = true
@@ -69,9 +69,9 @@ resource "azapi_resource" "virtual_machine" {
       storageProfile = {
         vmConfigStoragePathId = var.userStorageId == "" ? null : var.userStorageId
         imageReference = {
-          id = var.imageId
+          id = var.image_id
         }
-        dataDisks = [for i in range(length(var.dataDiskParams)) : {
+        dataDisks = [for i in range(length(var.data_disk_params)) : {
           id = azapi_resource.data_disks[i].id
         }]
       }

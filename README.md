@@ -47,25 +47,25 @@ The following resources are used by this module:
 
 The following input variables are required:
 
-### <a name="input_adminPassword"></a> [adminPassword](#input\_adminPassword)
+### <a name="input_admin_password"></a> [admin\_password](#input\_admin\_password)
 
 Description: Admin password
 
 Type: `string`
 
-### <a name="input_adminUsername"></a> [adminUsername](#input\_adminUsername)
+### <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username)
 
 Description: Admin username
 
 Type: `string`
 
-### <a name="input_customLocationId"></a> [customLocationId](#input\_customLocationId)
+### <a name="input_custom_location_id"></a> [custom\_location\_id](#input\_custom\_location\_id)
 
 Description: The custom location ID for the Azure Stack HCI cluster.
 
 Type: `string`
 
-### <a name="input_imageId"></a> [imageId](#input\_imageId)
+### <a name="input_image_id"></a> [image\_id](#input\_image\_id)
 
 Description: The name of a Marketplace Gallery Image already downloaded to the Azure Stack HCI cluster. For example: winServer2022-01
 
@@ -77,21 +77,21 @@ Description: Azure region where the resource should be deployed.
 
 Type: `string`
 
-### <a name="input_logicalNetworkId"></a> [logicalNetworkId](#input\_logicalNetworkId)
+### <a name="input_logical_network_id"></a> [logical\_network\_id](#input\_logical\_network\_id)
 
 Description: The ID of the logical network to use for the NIC.
+
+Type: `string`
+
+### <a name="input_name"></a> [name](#input\_name)
+
+Description: Name of the VM resource
 
 Type: `string`
 
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
 Description: The resource group where the resources will be deployed.
-
-Type: `string`
-
-### <a name="input_vmName"></a> [vmName](#input\_vmName)
-
-Description: Name of the VM resource
 
 Type: `string`
 
@@ -123,7 +123,7 @@ object({
 
 Default: `null`
 
-### <a name="input_dataDiskParams"></a> [dataDiskParams](#input\_dataDiskParams)
+### <a name="input_data_disk_params"></a> [data\_disk\_params](#input\_data\_disk\_params)
 
 Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
 
@@ -172,31 +172,31 @@ map(object({
 
 Default: `{}`
 
-### <a name="input_domainJoinPassword"></a> [domainJoinPassword](#input\_domainJoinPassword)
+### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
 
-Description: Optional Password of User with permissions to join the domain. - Required if 'domainToJoin' is specified.
-
-Type: `string`
-
-Default: `""`
-
-### <a name="input_domainJoinUserName"></a> [domainJoinUserName](#input\_domainJoinUserName)
-
-Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domainToJoin' is specified.
+Description: Optional Password of User with permissions to join the domain. - Required if 'domain\_to\_join' is specified.
 
 Type: `string`
 
 Default: `""`
 
-### <a name="input_domainTargetOu"></a> [domainTargetOu](#input\_domainTargetOu)
+### <a name="input_domain_join_user_name"></a> [domain\_join\_user\_name](#input\_domain\_join\_user\_name)
 
-Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domainToJoin' is specified.
+Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain\_to\_join' is specified.
 
 Type: `string`
 
 Default: `""`
 
-### <a name="input_domainToJoin"></a> [domainToJoin](#input\_domainToJoin)
+### <a name="input_domain_target_ou"></a> [domain\_target\_ou](#input\_domain\_target\_ou)
+
+Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domain_to_join"></a> [domain\_to\_join](#input\_domain\_to\_join)
 
 Description: Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment.
 
@@ -204,7 +204,7 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_dynamicMemory"></a> [dynamicMemory](#input\_dynamicMemory)
+### <a name="input_dynamic_memory"></a> [dynamic\_memory](#input\_dynamic\_memory)
 
 Description: Enable dynamic memory
 
@@ -212,7 +212,7 @@ Type: `bool`
 
 Default: `false`
 
-### <a name="input_dynamicMemoryBuffer"></a> [dynamicMemoryBuffer](#input\_dynamicMemoryBuffer)
+### <a name="input_dynamic_memory_buffer"></a> [dynamic\_memory\_buffer](#input\_dynamic\_memory\_buffer)
 
 Description: Buffer memory in MB when dynamic memory is enabled
 
@@ -220,7 +220,7 @@ Type: `number`
 
 Default: `20`
 
-### <a name="input_dynamicMemoryMax"></a> [dynamicMemoryMax](#input\_dynamicMemoryMax)
+### <a name="input_dynamic_memory_max"></a> [dynamic\_memory\_max](#input\_dynamic\_memory\_max)
 
 Description: Maximum memory in MB when dynamic memory is enabled
 
@@ -228,7 +228,7 @@ Type: `number`
 
 Default: `8192`
 
-### <a name="input_dynamicMemoryMin"></a> [dynamicMemoryMin](#input\_dynamicMemoryMin)
+### <a name="input_dynamic_memory_min"></a> [dynamic\_memory\_min](#input\_dynamic\_memory\_min)
 
 Description: Minimum memory in MB when dynamic memory is enabled
 
@@ -282,21 +282,13 @@ object({
 
 Default: `{}`
 
-### <a name="input_memoryMB"></a> [memoryMB](#input\_memoryMB)
+### <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb)
 
 Description: Memory in MB
 
 Type: `number`
 
 Default: `8192`
-
-### <a name="input_privateIPAddress"></a> [privateIPAddress](#input\_privateIPAddress)
-
-Description: The private IP address of the NIC
-
-Type: `string`
-
-Default: `""`
 
 ### <a name="input_private_endpoints"></a> [private\_endpoints](#input\_private\_endpoints)
 
@@ -362,6 +354,14 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address)
+
+Description: The private IP address of the NIC
+
+Type: `string`
+
+Default: `""`
+
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
 Description: A map of role assignments to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
@@ -407,7 +407,7 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_vCPUCount"></a> [vCPUCount](#input\_vCPUCount)
+### <a name="input_v_cpu_count"></a> [v\_cpu\_count](#input\_v\_cpu\_count)
 
 Description: Number of vCPUs
 
@@ -419,7 +419,7 @@ Default: `2`
 
 The following outputs are exported:
 
-### <a name="output_resource"></a> [resource](#output\_resource)
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: This is the full output for the resource.
 

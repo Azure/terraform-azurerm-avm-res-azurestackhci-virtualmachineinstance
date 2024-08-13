@@ -47,19 +47,19 @@ data "azurerm_resource_group" "rg" {
 
 data "azapi_resource" "customlocation" {
   type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
-  name      = var.customLocationName
+  name      = var.custom_location_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "winServerImage" {
+data "azapi_resource" "win_server_image" {
   type      = "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview"
   name      = "winServer2022-01"
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "logicalNetwork" {
+data "azapi_resource" "logical_network" {
   type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
-  name      = var.logicalNetworkName
+  name      = var.logical_network_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
@@ -70,27 +70,27 @@ data "azapi_resource" "logicalNetwork" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  count               = var.downloadWinServerImage ? 1 : 0
-  resource_group_name = var.resource_group_name
-  location            = data.azurerm_resource_group.rg.location
-  customLocationId    = data.azapi_resource.customlocation.id
-  vmName              = var.vmName
-  imageId             = data.azapi_resource.winServerImage.id
-  logicalNetworkId    = data.azapi_resource.logicalNetwork.id
-  adminUsername       = var.vmAdminUsername
-  adminPassword       = var.vmAdminPassword
-  vCPUCount           = var.vCPUCount
-  memoryMB            = var.memoryMB
-  dynamicMemory       = var.dynamicMemory
-  dynamicMemoryMax    = var.dynamicMemoryMax
-  dynamicMemoryMin    = var.dynamicMemoryMin
-  dynamicMemoryBuffer = var.dynamicMemoryBuffer
-  dataDiskParams      = var.dataDiskParams
-  privateIPAddress    = var.privateIPAddress
-  domainToJoin        = var.domainToJoin
-  domainTargetOu      = var.domainTargetOu
-  domainJoinUserName  = var.domainJoinUserName
-  domainJoinPassword  = var.domainJoinPassword
+  count                 = var.download_win_server_image ? 1 : 0
+  resource_group_name   = var.resource_group_name
+  location              = data.azurerm_resource_group.rg.location
+  custom_location_id    = data.azapi_resource.customlocation.id
+  name                  = var.name
+  image_id              = data.azapi_resource.win_server_image.id
+  logical_network_id    = data.azapi_resource.logical_network.id
+  admin_username        = var.vm_admin_username
+  admin_password        = var.vm_admin_password
+  v_cpu_count           = var.v_cpu_count
+  memory_mb             = var.memory_mb
+  dynamic_memory        = var.dynamic_memory
+  dynamic_memory_max    = var.dynamic_memory_max
+  dynamic_memory_min    = var.dynamic_memory_min
+  dynamic_memory_buffer = var.dynamic_memory_buffer
+  data_disk_params      = var.data_disk_params
+  private_ip_address    = var.private_ip_address
+  domain_to_join        = var.domain_to_join
+  domain_target_ou      = var.domain_target_ou
+  domain_join_user_name = var.domain_join_user_name
+  domain_join_password  = var.domain_join_password
 }
 ```
 
@@ -112,8 +112,8 @@ The following requirements are needed by this module:
 The following resources are used by this module:
 
 - [azapi_resource.customlocation](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
-- [azapi_resource.logicalNetwork](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
-- [azapi_resource.winServerImage](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.logical_network](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.win_server_image](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
 - [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -121,15 +121,21 @@ The following resources are used by this module:
 
 The following input variables are required:
 
-### <a name="input_customLocationName"></a> [customLocationName](#input\_customLocationName)
+### <a name="input_custom_location_name"></a> [custom\_location\_name](#input\_custom\_location\_name)
 
 Description: The name of the custom location.
 
 Type: `string`
 
-### <a name="input_logicalNetworkName"></a> [logicalNetworkName](#input\_logicalNetworkName)
+### <a name="input_logical_network_name"></a> [logical\_network\_name](#input\_logical\_network\_name)
 
 Description: The name of the logical network
+
+Type: `string`
+
+### <a name="input_name"></a> [name](#input\_name)
+
+Description: Name of the VM resource
 
 Type: `string`
 
@@ -139,15 +145,9 @@ Description: The resource group where the resources will be deployed.
 
 Type: `string`
 
-### <a name="input_vmAdminPassword"></a> [vmAdminPassword](#input\_vmAdminPassword)
+### <a name="input_vm_admin_password"></a> [vm\_admin\_password](#input\_vm\_admin\_password)
 
 Description: Admin password for the VM
-
-Type: `string`
-
-### <a name="input_vmName"></a> [vmName](#input\_vmName)
-
-Description: Name of the VM resource
 
 Type: `string`
 
@@ -155,7 +155,7 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
-### <a name="input_dataDiskParams"></a> [dataDiskParams](#input\_dataDiskParams)
+### <a name="input_data_disk_params"></a> [data\_disk\_params](#input\_data\_disk\_params)
 
 Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
 
@@ -170,31 +170,31 @@ list(object({
 
 Default: `[]`
 
-### <a name="input_domainJoinPassword"></a> [domainJoinPassword](#input\_domainJoinPassword)
+### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
 
-Description: Optional Password of User with permissions to join the domain. - Required if 'domainToJoin' is specified.
-
-Type: `string`
-
-Default: `""`
-
-### <a name="input_domainJoinUserName"></a> [domainJoinUserName](#input\_domainJoinUserName)
-
-Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domainToJoin' is specified.
+Description: Optional Password of User with permissions to join the domain. - Required if 'domain\_to\_join' is specified.
 
 Type: `string`
 
 Default: `""`
 
-### <a name="input_domainTargetOu"></a> [domainTargetOu](#input\_domainTargetOu)
+### <a name="input_domain_join_user_name"></a> [domain\_join\_user\_name](#input\_domain\_join\_user\_name)
 
-Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domainToJoin' is specified.
+Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain\_to\_join' is specified.
 
 Type: `string`
 
 Default: `""`
 
-### <a name="input_domainToJoin"></a> [domainToJoin](#input\_domainToJoin)
+### <a name="input_domain_target_ou"></a> [domain\_target\_ou](#input\_domain\_target\_ou)
+
+Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domain_to_join"></a> [domain\_to\_join](#input\_domain\_to\_join)
 
 Description: Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment.
 
@@ -202,7 +202,7 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_downloadWinServerImage"></a> [downloadWinServerImage](#input\_downloadWinServerImage)
+### <a name="input_download_win_server_image"></a> [download\_win\_server\_image](#input\_download\_win\_server\_image)
 
 Description: Whether to download Windows Server image
 
@@ -210,7 +210,7 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_dynamicMemory"></a> [dynamicMemory](#input\_dynamicMemory)
+### <a name="input_dynamic_memory"></a> [dynamic\_memory](#input\_dynamic\_memory)
 
 Description: Enable dynamic memory
 
@@ -218,7 +218,7 @@ Type: `bool`
 
 Default: `false`
 
-### <a name="input_dynamicMemoryBuffer"></a> [dynamicMemoryBuffer](#input\_dynamicMemoryBuffer)
+### <a name="input_dynamic_memory_buffer"></a> [dynamic\_memory\_buffer](#input\_dynamic\_memory\_buffer)
 
 Description: Buffer memory in MB when dynamic memory is enabled
 
@@ -226,7 +226,7 @@ Type: `number`
 
 Default: `20`
 
-### <a name="input_dynamicMemoryMax"></a> [dynamicMemoryMax](#input\_dynamicMemoryMax)
+### <a name="input_dynamic_memory_max"></a> [dynamic\_memory\_max](#input\_dynamic\_memory\_max)
 
 Description: Maximum memory in MB when dynamic memory is enabled
 
@@ -234,7 +234,7 @@ Type: `number`
 
 Default: `8192`
 
-### <a name="input_dynamicMemoryMin"></a> [dynamicMemoryMin](#input\_dynamicMemoryMin)
+### <a name="input_dynamic_memory_min"></a> [dynamic\_memory\_min](#input\_dynamic\_memory\_min)
 
 Description: Minimum memory in MB when dynamic memory is enabled
 
@@ -252,7 +252,7 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_memoryMB"></a> [memoryMB](#input\_memoryMB)
+### <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb)
 
 Description: Memory in MB
 
@@ -260,7 +260,7 @@ Type: `number`
 
 Default: `8192`
 
-### <a name="input_privateIPAddress"></a> [privateIPAddress](#input\_privateIPAddress)
+### <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address)
 
 Description: The private IP address of the NIC
 
@@ -268,7 +268,7 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_vCPUCount"></a> [vCPUCount](#input\_vCPUCount)
+### <a name="input_v_cpu_count"></a> [v\_cpu\_count](#input\_v\_cpu\_count)
 
 Description: Number of vCPUs
 
@@ -276,7 +276,7 @@ Type: `number`
 
 Default: `2`
 
-### <a name="input_vmAdminUsername"></a> [vmAdminUsername](#input\_vmAdminUsername)
+### <a name="input_vm_admin_username"></a> [vm\_admin\_username](#input\_vm\_admin\_username)
 
 Description:  The admin username for the VM.
 

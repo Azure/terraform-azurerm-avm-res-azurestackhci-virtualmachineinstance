@@ -1,30 +1,30 @@
-variable "adminPassword" {
+variable "admin_password" {
   type        = string
   description = "Admin password"
   sensitive   = true
 
   validation {
-    condition     = length(var.adminPassword) > 0
-    error_message = "The adminPassword cannot be empty"
+    condition     = length(var.admin_password) > 0
+    error_message = "The admin_password cannot be empty"
   }
 }
 
-variable "adminUsername" {
+variable "admin_username" {
   type        = string
   description = "Admin username"
 
   validation {
-    condition     = length(var.adminUsername) > 0
-    error_message = "The adminUsername cannot be empty"
+    condition     = length(var.admin_username) > 0
+    error_message = "The admin_username cannot be empty"
   }
 }
 
-variable "customLocationId" {
+variable "custom_location_id" {
   type        = string
   description = "The custom location ID for the Azure Stack HCI cluster."
 }
 
-variable "imageId" {
+variable "image_id" {
   type        = string
   description = "The name of a Marketplace Gallery Image already downloaded to the Azure Stack HCI cluster. For example: winServer2022-01"
 }
@@ -35,33 +35,33 @@ variable "location" {
   nullable    = false
 }
 
-variable "logicalNetworkId" {
+variable "logical_network_id" {
   type        = string
   description = "The ID of the logical network to use for the NIC."
+}
+
+variable "name" {
+  type        = string
+  description = "Name of the VM resource"
+
+  validation {
+    condition     = length(var.name) > 0
+    error_message = "The name cannot be empty"
+  }
+  validation {
+    condition     = length(var.name) <= 15
+    error_message = "The name must be less than or equal to 15 characters"
+  }
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]*$", var.name))
+    error_message = "The name must contain only alphanumeric characters and hyphens"
+  }
 }
 
 # This is required for most resource modules
 variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
-}
-
-variable "vmName" {
-  type        = string
-  description = "Name of the VM resource"
-
-  validation {
-    condition     = length(var.vmName) > 0
-    error_message = "The vmName cannot be empty"
-  }
-  validation {
-    condition     = length(var.vmName) <= 15
-    error_message = "The vmName must be less than or equal to 15 characters"
-  }
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9-]*$", var.vmName))
-    error_message = "The vmName must contain only alphanumeric characters and hyphens"
-  }
 }
 
 # required AVM interfaces
@@ -87,7 +87,7 @@ A map describing customer-managed keys to associate with the resource. This incl
 DESCRIPTION  
 }
 
-variable "dataDiskParams" {
+variable "data_disk_params" {
   type = list(object({
     diskSizeGB = number
     dynamic    = bool
@@ -141,50 +141,50 @@ DESCRIPTION
   }
 }
 
-variable "domainJoinPassword" {
+variable "domain_join_password" {
   type        = string
   default     = ""
-  description = "Optional Password of User with permissions to join the domain. - Required if 'domainToJoin' is specified."
+  description = "Optional Password of User with permissions to join the domain. - Required if 'domain_to_join' is specified."
   sensitive   = true
 }
 
-variable "domainJoinUserName" {
+variable "domain_join_user_name" {
   type        = string
   default     = ""
-  description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domainToJoin' is specified."
+  description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain_to_join' is specified."
 }
 
-variable "domainTargetOu" {
+variable "domain_target_ou" {
   type        = string
   default     = ""
-  description = "Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domainToJoin' is specified."
+  description = "Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domain_to_join' is specified."
 }
 
-variable "domainToJoin" {
+variable "domain_to_join" {
   type        = string
   default     = ""
   description = "Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment."
 }
 
-variable "dynamicMemory" {
+variable "dynamic_memory" {
   type        = bool
   default     = false
   description = "Enable dynamic memory"
 }
 
-variable "dynamicMemoryBuffer" {
+variable "dynamic_memory_buffer" {
   type        = number
   default     = 20
   description = "Buffer memory in MB when dynamic memory is enabled"
 }
 
-variable "dynamicMemoryMax" {
+variable "dynamic_memory_max" {
   type        = number
   default     = 8192
   description = "Maximum memory in MB when dynamic memory is enabled"
 }
 
-variable "dynamicMemoryMin" {
+variable "dynamic_memory_min" {
   type        = number
   default     = 512
   description = "Minimum memory in MB when dynamic memory is enabled"
@@ -236,16 +236,10 @@ DESCRIPTION
   nullable    = false
 }
 
-variable "memoryMB" {
+variable "memory_mb" {
   type        = number
   default     = 8192
   description = "Memory in MB"
-}
-
-variable "privateIPAddress" {
-  type        = string
-  default     = ""
-  description = "The private IP address of the NIC"
 }
 
 variable "private_endpoints" {
@@ -312,6 +306,12 @@ variable "private_endpoints_manage_dns_zone_group" {
   nullable    = false
 }
 
+variable "private_ip_address" {
+  type        = string
+  default     = ""
+  description = "The private IP address of the NIC"
+}
+
 variable "role_assignments" {
   type = map(object({
     role_definition_id_or_name             = string
@@ -351,7 +351,7 @@ variable "userStorageId" {
   description = "The user storage ID to store images."
 }
 
-variable "vCPUCount" {
+variable "v_cpu_count" {
   type        = number
   default     = 2
   description = "Number of vCPUs"

@@ -1,5 +1,5 @@
 resource "azapi_resource" "domain_join" {
-  count = length(var.domainToJoin) > 0 ? 1 : 0
+  count = length(var.domain_to_join) > 0 ? 1 : 0
 
   type = "Microsoft.HybridCompute/machines/extensions@2023-10-03-preview"
   body = {
@@ -9,14 +9,14 @@ resource "azapi_resource" "domain_join" {
       typeHandlerVersion      = "1.3"
       autoUpgradeMinorVersion = true
       settings = {
-        name    = var.domainToJoin
-        OUPath  = var.domainTargetOu
-        User    = "${var.domainToJoin}\\${var.domainJoinUserName}"
+        name    = var.domain_to_join
+        OUPath  = var.domain_target_ou
+        User    = "${var.domain_to_join}\\${var.domain_join_user_name}"
         Restart = true
         Options = 3
       }
       protectedSettings = {
-        Password = var.domainJoinPassword
+        Password = var.domain_join_password
       }
     }
   }

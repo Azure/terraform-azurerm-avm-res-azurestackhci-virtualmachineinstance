@@ -41,19 +41,19 @@ data "azurerm_resource_group" "rg" {
 
 data "azapi_resource" "customlocation" {
   type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
-  name      = var.customLocationName
+  name      = var.custom_location_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "winServerImage" {
+data "azapi_resource" "win_server_image" {
   type      = "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview"
   name      = "winServer2022-01"
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "logicalNetwork" {
+data "azapi_resource" "logical_network" {
   type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
-  name      = var.logicalNetworkName
+  name      = var.logical_network_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
@@ -64,25 +64,25 @@ data "azapi_resource" "logicalNetwork" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  count               = var.downloadWinServerImage ? 1 : 0
-  resource_group_name = var.resource_group_name
-  location            = data.azurerm_resource_group.rg.location
-  customLocationId    = data.azapi_resource.customlocation.id
-  vmName              = var.vmName
-  imageId             = data.azapi_resource.winServerImage.id
-  logicalNetworkId    = data.azapi_resource.logicalNetwork.id
-  adminUsername       = var.vmAdminUsername
-  adminPassword       = var.vmAdminPassword
-  vCPUCount           = var.vCPUCount
-  memoryMB            = var.memoryMB
-  dynamicMemory       = var.dynamicMemory
-  dynamicMemoryMax    = var.dynamicMemoryMax
-  dynamicMemoryMin    = var.dynamicMemoryMin
-  dynamicMemoryBuffer = var.dynamicMemoryBuffer
-  dataDiskParams      = var.dataDiskParams
-  privateIPAddress    = var.privateIPAddress
-  domainToJoin        = var.domainToJoin
-  domainTargetOu      = var.domainTargetOu
-  domainJoinUserName  = var.domainJoinUserName
-  domainJoinPassword  = var.domainJoinPassword
+  count                 = var.download_win_server_image ? 1 : 0
+  resource_group_name   = var.resource_group_name
+  location              = data.azurerm_resource_group.rg.location
+  custom_location_id    = data.azapi_resource.customlocation.id
+  name                  = var.name
+  image_id              = data.azapi_resource.win_server_image.id
+  logical_network_id    = data.azapi_resource.logical_network.id
+  admin_username        = var.vm_admin_username
+  admin_password        = var.vm_admin_password
+  v_cpu_count           = var.v_cpu_count
+  memory_mb             = var.memory_mb
+  dynamic_memory        = var.dynamic_memory
+  dynamic_memory_max    = var.dynamic_memory_max
+  dynamic_memory_min    = var.dynamic_memory_min
+  dynamic_memory_buffer = var.dynamic_memory_buffer
+  data_disk_params      = var.data_disk_params
+  private_ip_address    = var.private_ip_address
+  domain_to_join        = var.domain_to_join
+  domain_target_ou      = var.domain_target_ou
+  domain_join_user_name = var.domain_join_user_name
+  domain_join_password  = var.domain_join_password
 }

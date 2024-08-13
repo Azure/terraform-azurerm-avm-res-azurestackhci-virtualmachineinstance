@@ -1,11 +1,29 @@
-variable "customLocationName" {
+variable "custom_location_name" {
   type        = string
   description = "The name of the custom location."
 }
 
-variable "logicalNetworkName" {
+variable "logical_network_name" {
   type        = string
   description = "The name of the logical network"
+}
+
+variable "name" {
+  type        = string
+  description = "Name of the VM resource"
+
+  validation {
+    condition     = length(var.name) > 0
+    error_message = "The name cannot be empty"
+  }
+  validation {
+    condition     = length(var.name) <= 15
+    error_message = "The name must be less than or equal to 15 characters"
+  }
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]*$", var.name))
+    error_message = "The name must contain only alphanumeric characters and hyphens"
+  }
 }
 
 variable "resource_group_name" {
@@ -13,31 +31,13 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
-variable "vmAdminPassword" {
+variable "vm_admin_password" {
   type        = string
   description = "Admin password for the VM"
   sensitive   = true
 }
 
-variable "vmName" {
-  type        = string
-  description = "Name of the VM resource"
-
-  validation {
-    condition     = length(var.vmName) > 0
-    error_message = "The vmName cannot be empty"
-  }
-  validation {
-    condition     = length(var.vmName) <= 15
-    error_message = "The vmName must be less than or equal to 15 characters"
-  }
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9-]*$", var.vmName))
-    error_message = "The vmName must contain only alphanumeric characters and hyphens"
-  }
-}
-
-variable "dataDiskParams" {
+variable "data_disk_params" {
   type = list(object({
     diskSizeGB = number
     dynamic    = bool
@@ -46,56 +46,56 @@ variable "dataDiskParams" {
   description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
 }
 
-variable "domainJoinPassword" {
+variable "domain_join_password" {
   type        = string
   default     = ""
-  description = "Optional Password of User with permissions to join the domain. - Required if 'domainToJoin' is specified."
+  description = "Optional Password of User with permissions to join the domain. - Required if 'domain_to_join' is specified."
   sensitive   = true
 }
 
-variable "domainJoinUserName" {
+variable "domain_join_user_name" {
   type        = string
   default     = ""
-  description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domainToJoin' is specified."
+  description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain_to_join' is specified."
 }
 
-variable "domainTargetOu" {
+variable "domain_target_ou" {
   type        = string
   default     = ""
-  description = "Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domainToJoin' is specified."
+  description = "Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domain_to_join' is specified."
 }
 
-variable "domainToJoin" {
+variable "domain_to_join" {
   type        = string
   default     = ""
   description = "Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment."
 }
 
-variable "downloadWinServerImage" {
+variable "download_win_server_image" {
   type        = bool
   default     = true
   description = "Whether to download Windows Server image"
 }
 
-variable "dynamicMemory" {
+variable "dynamic_memory" {
   type        = bool
   default     = false
   description = "Enable dynamic memory"
 }
 
-variable "dynamicMemoryBuffer" {
+variable "dynamic_memory_buffer" {
   type        = number
   default     = 20
   description = "Buffer memory in MB when dynamic memory is enabled"
 }
 
-variable "dynamicMemoryMax" {
+variable "dynamic_memory_max" {
   type        = number
   default     = 8192
   description = "Maximum memory in MB when dynamic memory is enabled"
 }
 
-variable "dynamicMemoryMin" {
+variable "dynamic_memory_min" {
   type        = number
   default     = 512
   description = "Minimum memory in MB when dynamic memory is enabled"
@@ -111,25 +111,25 @@ If it is set to false, then no telemetry will be collected.
 DESCRIPTION
 }
 
-variable "memoryMB" {
+variable "memory_mb" {
   type        = number
   default     = 8192
   description = "Memory in MB"
 }
 
-variable "privateIPAddress" {
+variable "private_ip_address" {
   type        = string
   default     = ""
   description = "The private IP address of the NIC"
 }
 
-variable "vCPUCount" {
+variable "v_cpu_count" {
   type        = number
   default     = 2
   description = "Number of vCPUs"
 }
 
-variable "vmAdminUsername" {
+variable "vm_admin_username" {
   type        = string
   default     = "admin"
   description = " The admin username for the VM."
