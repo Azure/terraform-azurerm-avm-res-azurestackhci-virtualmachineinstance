@@ -1,13 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# terraform-azurerm-avm-template
+# terraform-azurerm-avm-res-azurestackhci-virtualmachineinstance
 
-This is a template repo for Terraform Azure Verified Modules.
-
-Things to do:
-
-1. Set up a GitHub repo environment called `test`.
-1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
-1. Install Docker Desktop to run tests
+Provision for AzureStackHCI virtual machine.
 
 > [!IMPORTANT]
 > As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not fully functional and implemented across all supported languages yet - breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated. Hence, modules **MUST NOT** be published at version `1.0.0` or higher at this time.
@@ -23,35 +17,29 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 1.13)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.71)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.71)
-
-- <a name="provider_modtm"></a> [modtm](#provider\_modtm) (~> 0.3)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
-
 ## Resources
 
 The following resources are used by this module:
 
+- [azapi_resource.data_disks](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.domain_join](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.hybrid_compute_machine](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.nic](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.virtual_machine](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
-- [azurerm_private_endpoint.this_managed_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint.this_unmanaged_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint_application_security_group_association.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint_application_security_group_association) (resource)
-- [azurerm_resource_group.TODO](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -59,21 +47,51 @@ The following resources are used by this module:
 
 The following input variables are required:
 
+### <a name="input_adminPassword"></a> [adminPassword](#input\_adminPassword)
+
+Description: Admin password
+
+Type: `string`
+
+### <a name="input_adminUsername"></a> [adminUsername](#input\_adminUsername)
+
+Description: Admin username
+
+Type: `string`
+
+### <a name="input_customLocationId"></a> [customLocationId](#input\_customLocationId)
+
+Description: The custom location ID for the Azure Stack HCI cluster.
+
+Type: `string`
+
+### <a name="input_imageId"></a> [imageId](#input\_imageId)
+
+Description: The name of a Marketplace Gallery Image already downloaded to the Azure Stack HCI cluster. For example: winServer2022-01
+
+Type: `string`
+
 ### <a name="input_location"></a> [location](#input\_location)
 
 Description: Azure region where the resource should be deployed.
 
 Type: `string`
 
-### <a name="input_name"></a> [name](#input\_name)
+### <a name="input_logicalNetworkId"></a> [logicalNetworkId](#input\_logicalNetworkId)
 
-Description: The name of the this resource.
+Description: The ID of the logical network to use for the NIC.
 
 Type: `string`
 
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
 Description: The resource group where the resources will be deployed.
+
+Type: `string`
+
+### <a name="input_vmName"></a> [vmName](#input\_vmName)
+
+Description: Name of the VM resource
 
 Type: `string`
 
@@ -104,6 +122,21 @@ object({
 ```
 
 Default: `null`
+
+### <a name="input_dataDiskParams"></a> [dataDiskParams](#input\_dataDiskParams)
+
+Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
+
+Type:
+
+```hcl
+list(object({
+    diskSizeGB = number
+    dynamic    = bool
+  }))
+```
+
+Default: `[]`
 
 ### <a name="input_diagnostic_settings"></a> [diagnostic\_settings](#input\_diagnostic\_settings)
 
@@ -138,6 +171,70 @@ map(object({
 ```
 
 Default: `{}`
+
+### <a name="input_domainJoinPassword"></a> [domainJoinPassword](#input\_domainJoinPassword)
+
+Description: Optional Password of User with permissions to join the domain. - Required if 'domainToJoin' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domainJoinUserName"></a> [domainJoinUserName](#input\_domainJoinUserName)
+
+Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domainToJoin' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domainTargetOu"></a> [domainTargetOu](#input\_domainTargetOu)
+
+Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domainToJoin' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domainToJoin"></a> [domainToJoin](#input\_domainToJoin)
+
+Description: Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_dynamicMemory"></a> [dynamicMemory](#input\_dynamicMemory)
+
+Description: Enable dynamic memory
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_dynamicMemoryBuffer"></a> [dynamicMemoryBuffer](#input\_dynamicMemoryBuffer)
+
+Description: Buffer memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `20`
+
+### <a name="input_dynamicMemoryMax"></a> [dynamicMemoryMax](#input\_dynamicMemoryMax)
+
+Description: Maximum memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `8192`
+
+### <a name="input_dynamicMemoryMin"></a> [dynamicMemoryMin](#input\_dynamicMemoryMin)
+
+Description: Minimum memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `512`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
@@ -184,6 +281,22 @@ object({
 ```
 
 Default: `{}`
+
+### <a name="input_memoryMB"></a> [memoryMB](#input\_memoryMB)
+
+Description: Memory in MB
+
+Type: `number`
+
+Default: `8192`
+
+### <a name="input_privateIPAddress"></a> [privateIPAddress](#input\_privateIPAddress)
+
+Description: The private IP address of the NIC
+
+Type: `string`
+
+Default: `""`
 
 ### <a name="input_private_endpoints"></a> [private\_endpoints](#input\_private\_endpoints)
 
@@ -286,13 +399,25 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_userStorageId"></a> [userStorageId](#input\_userStorageId)
+
+Description: The user storage ID to store images.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_vCPUCount"></a> [vCPUCount](#input\_vCPUCount)
+
+Description: Number of vCPUs
+
+Type: `number`
+
+Default: `2`
+
 ## Outputs
 
 The following outputs are exported:
-
-### <a name="output_private_endpoints"></a> [private\_endpoints](#output\_private\_endpoints)
-
-Description:   A map of the private endpoints created.
 
 ### <a name="output_resource"></a> [resource](#output\_resource)
 

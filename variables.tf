@@ -1,25 +1,67 @@
+variable "adminPassword" {
+  type        = string
+  description = "Admin password"
+  sensitive   = true
+
+  validation {
+    condition     = length(var.adminPassword) > 0
+    error_message = "The adminPassword cannot be empty"
+  }
+}
+
+variable "adminUsername" {
+  type        = string
+  description = "Admin username"
+
+  validation {
+    condition     = length(var.adminUsername) > 0
+    error_message = "The adminUsername cannot be empty"
+  }
+}
+
+variable "customLocationId" {
+  type        = string
+  description = "The custom location ID for the Azure Stack HCI cluster."
+}
+
+variable "imageId" {
+  type        = string
+  description = "The name of a Marketplace Gallery Image already downloaded to the Azure Stack HCI cluster. For example: winServer2022-01"
+}
+
 variable "location" {
   type        = string
   description = "Azure region where the resource should be deployed."
   nullable    = false
 }
 
-variable "name" {
+variable "logicalNetworkId" {
   type        = string
-  description = "The name of the this resource."
-
-  validation {
-    condition     = can(regex("TODO", var.name))
-    error_message = "The name must be TODO." # TODO remove the example below once complete:
-    #condition     = can(regex("^[a-z0-9]{5,50}$", var.name))
-    #error_message = "The name must be between 5 and 50 characters long and can only contain lowercase letters and numbers."
-  }
+  description = "The ID of the logical network to use for the NIC."
 }
 
 # This is required for most resource modules
 variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
+}
+
+variable "vmName" {
+  type        = string
+  description = "Name of the VM resource"
+
+  validation {
+    condition     = length(var.vmName) > 0
+    error_message = "The vmName cannot be empty"
+  }
+  validation {
+    condition     = length(var.vmName) <= 15
+    error_message = "The vmName must be less than or equal to 15 characters"
+  }
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]*$", var.vmName))
+    error_message = "The vmName must contain only alphanumeric characters and hyphens"
+  }
 }
 
 # required AVM interfaces
@@ -43,6 +85,15 @@ A map describing customer-managed keys to associate with the resource. This incl
 - `user_assigned_identity` - (Optional) An object representing a user-assigned identity with the following properties:
   - `resource_id` - The resource ID of the user-assigned identity.
 DESCRIPTION  
+}
+
+variable "dataDiskParams" {
+  type = list(object({
+    diskSizeGB = number
+    dynamic    = bool
+  }))
+  default     = []
+  description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
 }
 
 variable "diagnostic_settings" {
@@ -90,6 +141,55 @@ DESCRIPTION
   }
 }
 
+variable "domainJoinPassword" {
+  type        = string
+  default     = ""
+  description = "Optional Password of User with permissions to join the domain. - Required if 'domainToJoin' is specified."
+  sensitive   = true
+}
+
+variable "domainJoinUserName" {
+  type        = string
+  default     = ""
+  description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domainToJoin' is specified."
+}
+
+variable "domainTargetOu" {
+  type        = string
+  default     = ""
+  description = "Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domainToJoin' is specified."
+}
+
+variable "domainToJoin" {
+  type        = string
+  default     = ""
+  description = "Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment."
+}
+
+variable "dynamicMemory" {
+  type        = bool
+  default     = false
+  description = "Enable dynamic memory"
+}
+
+variable "dynamicMemoryBuffer" {
+  type        = number
+  default     = 20
+  description = "Buffer memory in MB when dynamic memory is enabled"
+}
+
+variable "dynamicMemoryMax" {
+  type        = number
+  default     = 8192
+  description = "Maximum memory in MB when dynamic memory is enabled"
+}
+
+variable "dynamicMemoryMin" {
+  type        = number
+  default     = 512
+  description = "Minimum memory in MB when dynamic memory is enabled"
+}
+
 variable "enable_telemetry" {
   type        = bool
   default     = true
@@ -134,6 +234,18 @@ Controls the Managed Identity configuration on this resource. The following prop
 - `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
 DESCRIPTION
   nullable    = false
+}
+
+variable "memoryMB" {
+  type        = number
+  default     = 8192
+  description = "Memory in MB"
+}
+
+variable "privateIPAddress" {
+  type        = string
+  default     = ""
+  description = "The private IP address of the NIC"
 }
 
 variable "private_endpoints" {
@@ -231,4 +343,16 @@ variable "tags" {
   type        = map(string)
   default     = null
   description = "(Optional) Tags of the resource."
+}
+
+variable "userStorageId" {
+  type        = string
+  default     = ""
+  description = "The user storage ID to store images."
+}
+
+variable "vCPUCount" {
+  type        = number
+  default     = 2
+  description = "Number of vCPUs"
 }
