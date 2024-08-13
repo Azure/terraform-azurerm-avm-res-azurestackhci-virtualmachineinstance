@@ -67,7 +67,7 @@ resource "azapi_resource" "virtual_machine" {
         }
       }
       storageProfile = {
-        vmConfigStoragePathId = var.userStorageId == "" ? null : var.userStorageId
+        vmConfigStoragePathId = var.user_storage_id == "" ? null : var.user_storage_id
         imageReference = {
           id = var.image_id
         }

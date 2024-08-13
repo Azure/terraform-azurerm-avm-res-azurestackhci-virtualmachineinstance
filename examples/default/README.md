@@ -15,10 +15,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
   }
 }
 
@@ -70,6 +66,7 @@ data "azapi_resource" "logical_network" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  enable_telemetry      = var.enable_telemetry
   count                 = var.download_win_server_image ? 1 : 0
   resource_group_name   = var.resource_group_name
   location              = data.azurerm_resource_group.rg.location
@@ -104,8 +101,6 @@ The following requirements are needed by this module:
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 1.13)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
-
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 ## Resources
 

@@ -9,10 +9,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
   }
 }
 
@@ -64,6 +60,7 @@ data "azapi_resource" "logical_network" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  enable_telemetry      = var.enable_telemetry
   count                 = var.download_win_server_image ? 1 : 0
   resource_group_name   = var.resource_group_name
   location              = data.azurerm_resource_group.rg.location

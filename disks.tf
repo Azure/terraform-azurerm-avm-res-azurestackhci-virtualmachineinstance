@@ -10,7 +10,7 @@ resource "azapi_resource" "data_disks" {
     properties = {
       diskSizeGB = var.data_disk_params[count.index].diskSizeGB
       dynamic    = var.data_disk_params[count.index].dynamic
-      // containerId: uncomment if you want to target a specific CSV/storage path in your HCI cluster
+      # containerId: uncomment if you want to target a specific CSV/storage path in your HCI cluster
     }
   }
   location  = var.location
