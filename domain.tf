@@ -16,7 +16,7 @@ resource "azapi_resource" "domain_join" {
         Options = 3
       }
       protectedSettings = {
-        Password = var.domain_join_password
+        Password = local.domain_join_password
       }
     }
   }

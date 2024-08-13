@@ -50,7 +50,7 @@ resource "azapi_resource" "virtual_machine" {
       hardwareProfile = {
         vmSize     = "Custom"
         processors = var.v_cpu_count
-        memory_mb  = var.memory_mb
+        memoryMB   = var.memory_mb
         dynamicMemoryConfig = var.dynamic_memory ? null : {
           maximumMemoryMB    = var.dynamic_memory_max
           minimumMemoryMB    = var.dynamic_memory_min
@@ -58,9 +58,9 @@ resource "azapi_resource" "virtual_machine" {
         }
       }
       osProfile = {
-        admin_username = var.admin_username
-        admin_password = var.admin_password
-        computerName   = var.name
+        adminUsername = var.admin_username
+        adminPassword = var.admin_password
+        computerName  = var.name
         windowsConfiguration = {
           provisionVMAgent       = true
           provisionVMConfigAgent = true

@@ -171,7 +171,7 @@ Description: Optional Password of User with permissions to join the domain. - Re
 
 Type: `string`
 
-Default: `""`
+Default: `null`
 
 ### <a name="input_domain_join_user_name"></a> [domain\_join\_user\_name](#input\_domain\_join\_user\_name)
 

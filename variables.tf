@@ -98,7 +98,7 @@ variable "data_disk_params" {
 
 variable "domain_join_password" {
   type        = string
-  default     = ""
+  default     = null
   description = "Optional Password of User with permissions to join the domain. - Required if 'domain_to_join' is specified."
   sensitive   = true
 }

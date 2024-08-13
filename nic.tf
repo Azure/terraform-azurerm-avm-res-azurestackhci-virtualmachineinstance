@@ -13,7 +13,7 @@ resource "azapi_resource" "nic" {
           subnet = {
             id = var.logical_network_id
           }
-          private_ip_address = var.private_ip_address == "" ? null : var.private_ip_address
+          privateIPAddress = var.private_ip_address == "" ? null : var.private_ip_address
         }
       }]
     }
