@@ -1,13 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# terraform-azurerm-avm-template
+# terraform-azurerm-avm-res-azurestackhci-virtualmachineinstance
 
-This is a template repo for Terraform Azure Verified Modules.
-
-Things to do:
-
-1. Set up a GitHub repo environment called `test`.
-1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
-1. Install Docker Desktop to run tests
+Provision for AzureStackHCI virtual machine.
 
 > [!IMPORTANT]
 > As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not fully functional and implemented across all supported languages yet - breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated. Hence, modules **MUST NOT** be published at version `1.0.0` or higher at this time.
@@ -23,35 +17,29 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 1.13)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.71)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.71)
-
-- <a name="provider_modtm"></a> [modtm](#provider\_modtm) (~> 0.3)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
-
 ## Resources
 
 The following resources are used by this module:
 
+- [azapi_resource.data_disks](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.domain_join](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.hybrid_compute_machine](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.nic](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.virtual_machine](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
-- [azurerm_private_endpoint.this_managed_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint.this_unmanaged_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint_application_security_group_association.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint_application_security_group_association) (resource)
-- [azurerm_resource_group.TODO](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -59,15 +47,45 @@ The following resources are used by this module:
 
 The following input variables are required:
 
+### <a name="input_admin_password"></a> [admin\_password](#input\_admin\_password)
+
+Description: Admin password
+
+Type: `string`
+
+### <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username)
+
+Description: Admin username
+
+Type: `string`
+
+### <a name="input_custom_location_id"></a> [custom\_location\_id](#input\_custom\_location\_id)
+
+Description: The custom location ID for the Azure Stack HCI cluster.
+
+Type: `string`
+
+### <a name="input_image_id"></a> [image\_id](#input\_image\_id)
+
+Description: The name of a Marketplace Gallery Image already downloaded to the Azure Stack HCI cluster. For example: winServer2022-01
+
+Type: `string`
+
 ### <a name="input_location"></a> [location](#input\_location)
 
 Description: Azure region where the resource should be deployed.
 
 Type: `string`
 
+### <a name="input_logical_network_id"></a> [logical\_network\_id](#input\_logical\_network\_id)
+
+Description: The ID of the logical network to use for the NIC.
+
+Type: `string`
+
 ### <a name="input_name"></a> [name](#input\_name)
 
-Description: The name of the this resource.
+Description: Name of the VM resource
 
 Type: `string`
 
@@ -81,63 +99,85 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
-### <a name="input_customer_managed_key"></a> [customer\_managed\_key](#input\_customer\_managed\_key)
+### <a name="input_data_disk_params"></a> [data\_disk\_params](#input\_data\_disk\_params)
 
-Description: A map describing customer-managed keys to associate with the resource. This includes the following properties:
-- `key_vault_resource_id` - The resource ID of the Key Vault where the key is stored.
-- `key_name` - The name of the key.
-- `key_version` - (Optional) The version of the key. If not specified, the latest version is used.
-- `user_assigned_identity` - (Optional) An object representing a user-assigned identity with the following properties:
-  - `resource_id` - The resource ID of the user-assigned identity.
-
-Type:
-
-```hcl
-object({
-    key_vault_resource_id = string
-    key_name              = string
-    key_version           = optional(string, null)
-    user_assigned_identity = optional(object({
-      resource_id = string
-    }), null)
-  })
-```
-
-Default: `null`
-
-### <a name="input_diagnostic_settings"></a> [diagnostic\_settings](#input\_diagnostic\_settings)
-
-Description: A map of diagnostic settings to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-
-- `name` - (Optional) The name of the diagnostic setting. One will be generated if not set, however this will not be unique if you want to create multiple diagnostic setting resources.
-- `log_categories` - (Optional) A set of log categories to send to the log analytics workspace. Defaults to `[]`.
-- `log_groups` - (Optional) A set of log groups to send to the log analytics workspace. Defaults to `["allLogs"]`.
-- `metric_categories` - (Optional) A set of metric categories to send to the log analytics workspace. Defaults to `["AllMetrics"]`.
-- `log_analytics_destination_type` - (Optional) The destination type for the diagnostic setting. Possible values are `Dedicated` and `AzureDiagnostics`. Defaults to `Dedicated`.
-- `workspace_resource_id` - (Optional) The resource ID of the log analytics workspace to send logs and metrics to.
-- `storage_account_resource_id` - (Optional) The resource ID of the storage account to send logs and metrics to.
-- `event_hub_authorization_rule_resource_id` - (Optional) The resource ID of the event hub authorization rule to send logs and metrics to.
-- `event_hub_name` - (Optional) The name of the event hub. If none is specified, the default event hub will be selected.
-- `marketplace_partner_resource_id` - (Optional) The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic LogsLogs.
+Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
 
 Type:
 
 ```hcl
 map(object({
-    name                                     = optional(string, null)
-    log_categories                           = optional(set(string), [])
-    log_groups                               = optional(set(string), ["allLogs"])
-    metric_categories                        = optional(set(string), ["AllMetrics"])
-    log_analytics_destination_type           = optional(string, "Dedicated")
-    workspace_resource_id                    = optional(string, null)
-    storage_account_resource_id              = optional(string, null)
-    event_hub_authorization_rule_resource_id = optional(string, null)
-    event_hub_name                           = optional(string, null)
-    marketplace_partner_resource_id          = optional(string, null)
+    name       = string
+    diskSizeGB = number
+    dynamic    = bool
   }))
 ```
 
 Default: `{}`
+
+### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
+
+Description: Optional Password of User with permissions to join the domain. - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_domain_join_user_name"></a> [domain\_join\_user\_name](#input\_domain\_join\_user\_name)
+
+Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domain_target_ou"></a> [domain\_target\_ou](#input\_domain\_target\_ou)
+
+Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domain_to_join"></a> [domain\_to\_join](#input\_domain\_to\_join)
+
+Description: Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_dynamic_memory"></a> [dynamic\_memory](#input\_dynamic\_memory)
+
+Description: Enable dynamic memory
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_dynamic_memory_buffer"></a> [dynamic\_memory\_buffer](#input\_dynamic\_memory\_buffer)
+
+Description: Buffer memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `20`
+
+### <a name="input_dynamic_memory_max"></a> [dynamic\_memory\_max](#input\_dynamic\_memory\_max)
+
+Description: Maximum memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `8192`
+
+### <a name="input_dynamic_memory_min"></a> [dynamic\_memory\_min](#input\_dynamic\_memory\_min)
+
+Description: Minimum memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `512`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
@@ -185,69 +225,21 @@ object({
 
 Default: `{}`
 
-### <a name="input_private_endpoints"></a> [private\_endpoints](#input\_private\_endpoints)
+### <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb)
 
-Description: A map of private endpoints to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+Description: Memory in MB
 
-- `name` - (Optional) The name of the private endpoint. One will be generated if not set.
-- `role_assignments` - (Optional) A map of role assignments to create on the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time. See `var.role_assignments` for more information.
-- `lock` - (Optional) The lock level to apply to the private endpoint. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`.
-- `tags` - (Optional) A mapping of tags to assign to the private endpoint.
-- `subnet_resource_id` - The resource ID of the subnet to deploy the private endpoint in.
-- `private_dns_zone_group_name` - (Optional) The name of the private DNS zone group. One will be generated if not set.
-- `private_dns_zone_resource_ids` - (Optional) A set of resource IDs of private DNS zones to associate with the private endpoint. If not set, no zone groups will be created and the private endpoint will not be associated with any private DNS zones. DNS records must be managed external to this module.
-- `application_security_group_resource_ids` - (Optional) A map of resource IDs of application security groups to associate with the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-- `private_service_connection_name` - (Optional) The name of the private service connection. One will be generated if not set.
-- `network_interface_name` - (Optional) The name of the network interface. One will be generated if not set.
-- `location` - (Optional) The Azure location where the resources will be deployed. Defaults to the location of the resource group.
-- `resource_group_name` - (Optional) The resource group where the resources will be deployed. Defaults to the resource group of this resource.
-- `ip_configurations` - (Optional) A map of IP configurations to create on the private endpoint. If not specified the platform will create one. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-  - `name` - The name of the IP configuration.
-  - `private_ip_address` - The private IP address of the IP configuration.
+Type: `number`
 
-Type:
+Default: `8192`
 
-```hcl
-map(object({
-    name = optional(string, null)
-    role_assignments = optional(map(object({
-      role_definition_id_or_name             = string
-      principal_id                           = string
-      description                            = optional(string, null)
-      skip_service_principal_aad_check       = optional(bool, false)
-      condition                              = optional(string, null)
-      condition_version                      = optional(string, null)
-      delegated_managed_identity_resource_id = optional(string, null)
-    })), {})
-    lock = optional(object({
-      kind = string
-      name = optional(string, null)
-    }), null)
-    tags                                    = optional(map(string), null)
-    subnet_resource_id                      = string
-    private_dns_zone_group_name             = optional(string, "default")
-    private_dns_zone_resource_ids           = optional(set(string), [])
-    application_security_group_associations = optional(map(string), {})
-    private_service_connection_name         = optional(string, null)
-    network_interface_name                  = optional(string, null)
-    location                                = optional(string, null)
-    resource_group_name                     = optional(string, null)
-    ip_configurations = optional(map(object({
-      name               = string
-      private_ip_address = string
-    })), {})
-  }))
-```
+### <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address)
 
-Default: `{}`
+Description: The private IP address of the NIC
 
-### <a name="input_private_endpoints_manage_dns_zone_group"></a> [private\_endpoints\_manage\_dns\_zone\_group](#input\_private\_endpoints\_manage\_dns\_zone\_group)
+Type: `string`
 
-Description: Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy.
-
-Type: `bool`
-
-Default: `true`
+Default: `""`
 
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
@@ -273,6 +265,7 @@ map(object({
     condition                              = optional(string, null)
     condition_version                      = optional(string, null)
     delegated_managed_identity_resource_id = optional(string, null)
+    principal_type                         = optional(string, null)
   }))
 ```
 
@@ -286,15 +279,27 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_user_storage_id"></a> [user\_storage\_id](#input\_user\_storage\_id)
+
+Description: The user storage ID to store images.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_v_cpu_count"></a> [v\_cpu\_count](#input\_v\_cpu\_count)
+
+Description: Number of vCPUs
+
+Type: `number`
+
+Default: `2`
+
 ## Outputs
 
 The following outputs are exported:
 
-### <a name="output_private_endpoints"></a> [private\_endpoints](#output\_private\_endpoints)
-
-Description:   A map of the private endpoints created.
-
-### <a name="output_resource"></a> [resource](#output\_resource)
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: This is the full output for the resource.
 

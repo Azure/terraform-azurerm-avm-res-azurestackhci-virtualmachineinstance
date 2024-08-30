@@ -7,39 +7,32 @@ This deploys the module in its simplest form.
 terraform {
   required_version = "~> 1.5"
   required_providers {
+    azapi = {
+      source  = "azure/azapi"
+      version = "~> 1.13"
+    }
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
-    }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.5"
     }
   }
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
-  source  = "Azure/regions/azurerm"
-  version = "~> 0.3"
+  source  = "Azure/avm-utl-regions/azurerm"
+  version = "~> 0.1"
 }
-
-# This allows us to randomize the region for the resource group.
-resource "random_integer" "region_index" {
-  max = length(module.regions.regions) - 1
-  min = 0
-}
-## End of section to provide a random Azure region for the resource group
 
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
@@ -48,9 +41,26 @@ module "naming" {
 }
 
 # This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  location = module.regions.regions[random_integer.region_index.result].name
-  name     = module.naming.resource_group.name_unique
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
+data "azapi_resource" "customlocation" {
+  type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
+  name      = var.custom_location_name
+  parent_id = data.azurerm_resource_group.rg.id
+}
+
+data "azapi_resource" "win_server_image" {
+  type      = "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview"
+  name      = "winServer2022-01"
+  parent_id = data.azurerm_resource_group.rg.id
+}
+
+data "azapi_resource" "logical_network" {
+  type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
+  name      = var.logical_network_name
+  parent_id = data.azurerm_resource_group.rg.id
 }
 
 # This is the module call
@@ -59,13 +69,29 @@ resource "azurerm_resource_group" "this" {
 # with a data source.
 module "test" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
-  resource_group_name = azurerm_resource_group.this.name
-
-  enable_telemetry = var.enable_telemetry # see variables.tf
+  # source             = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
+  enable_telemetry      = var.enable_telemetry
+  count                 = var.download_win_server_image ? 1 : 0
+  resource_group_name   = var.resource_group_name
+  location              = data.azurerm_resource_group.rg.location
+  custom_location_id    = data.azapi_resource.customlocation.id
+  name                  = var.name
+  image_id              = data.azapi_resource.win_server_image.id
+  logical_network_id    = data.azapi_resource.logical_network.id
+  admin_username        = var.vm_admin_username
+  admin_password        = var.vm_admin_password
+  v_cpu_count           = var.v_cpu_count
+  memory_mb             = var.memory_mb
+  dynamic_memory        = var.dynamic_memory
+  dynamic_memory_max    = var.dynamic_memory_max
+  dynamic_memory_min    = var.dynamic_memory_min
+  dynamic_memory_buffer = var.dynamic_memory_buffer
+  data_disk_params      = var.data_disk_params
+  private_ip_address    = var.private_ip_address
+  domain_to_join        = var.domain_to_join
+  domain_target_ou      = var.domain_target_ou
+  domain_join_user_name = var.domain_join_user_name
+  domain_join_password  = var.domain_join_password
 }
 ```
 
@@ -76,35 +102,145 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 1.13)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
-
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
-
-- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
-
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.74)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
 
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [azapi_resource.customlocation](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.logical_network](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.win_server_image](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_custom_location_name"></a> [custom\_location\_name](#input\_custom\_location\_name)
+
+Description: The name of the custom location.
+
+Type: `string`
+
+### <a name="input_logical_network_name"></a> [logical\_network\_name](#input\_logical\_network\_name)
+
+Description: The name of the logical network
+
+Type: `string`
+
+### <a name="input_name"></a> [name](#input\_name)
+
+Description: Name of the VM resource
+
+Type: `string`
+
+### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+
+Description: The resource group where the resources will be deployed.
+
+Type: `string`
+
+### <a name="input_vm_admin_password"></a> [vm\_admin\_password](#input\_vm\_admin\_password)
+
+Description: Admin password for the VM
+
+Type: `string`
 
 ## Optional Inputs
 
 The following input variables are optional (have default values):
+
+### <a name="input_data_disk_params"></a> [data\_disk\_params](#input\_data\_disk\_params)
+
+Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
+
+Type:
+
+```hcl
+map(object({
+    name       = string
+    diskSizeGB = number
+    dynamic    = bool
+  }))
+```
+
+Default: `{}`
+
+### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
+
+Description: Optional Password of User with permissions to join the domain. - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_domain_join_user_name"></a> [domain\_join\_user\_name](#input\_domain\_join\_user\_name)
+
+Description: Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domain_target_ou"></a> [domain\_target\_ou](#input\_domain\_target\_ou)
+
+Description: Optional domain organizational unit to join. example: ou=computers,dc=contoso,dc=com - Required if 'domain\_to\_join' is specified.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_domain_to_join"></a> [domain\_to\_join](#input\_domain\_to\_join)
+
+Description: Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_download_win_server_image"></a> [download\_win\_server\_image](#input\_download\_win\_server\_image)
+
+Description: Whether to download Windows Server image
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_dynamic_memory"></a> [dynamic\_memory](#input\_dynamic\_memory)
+
+Description: Enable dynamic memory
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_dynamic_memory_buffer"></a> [dynamic\_memory\_buffer](#input\_dynamic\_memory\_buffer)
+
+Description: Buffer memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `20`
+
+### <a name="input_dynamic_memory_max"></a> [dynamic\_memory\_max](#input\_dynamic\_memory\_max)
+
+Description: Maximum memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `8192`
+
+### <a name="input_dynamic_memory_min"></a> [dynamic\_memory\_min](#input\_dynamic\_memory\_min)
+
+Description: Minimum memory in MB when dynamic memory is enabled
+
+Type: `number`
+
+Default: `512`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
@@ -115,6 +251,38 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb)
+
+Description: Memory in MB
+
+Type: `number`
+
+Default: `8192`
+
+### <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address)
+
+Description: The private IP address of the NIC
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_v_cpu_count"></a> [v\_cpu\_count](#input\_v\_cpu\_count)
+
+Description: Number of vCPUs
+
+Type: `number`
+
+Default: `2`
+
+### <a name="input_vm_admin_username"></a> [vm\_admin\_username](#input\_vm\_admin\_username)
+
+Description:  The admin username for the VM.
+
+Type: `string`
+
+Default: `"admin"`
 
 ## Outputs
 
@@ -132,9 +300,9 @@ Version: ~> 0.3
 
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
-Source: Azure/regions/azurerm
+Source: Azure/avm-utl-regions/azurerm
 
-Version: ~> 0.3
+Version: ~> 0.1
 
 ### <a name="module_test"></a> [test](#module\_test)
 
