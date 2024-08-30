@@ -8,7 +8,7 @@ resource "azapi_resource" "nic" {
 
     properties = {
       ipConfigurations = [{
-        name = null
+        name = "${var.name}-ipconfig"
         properties = {
           subnet = {
             id = var.logical_network_id

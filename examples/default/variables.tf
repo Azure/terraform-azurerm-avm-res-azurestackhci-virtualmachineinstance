@@ -38,11 +38,12 @@ variable "vm_admin_password" {
 }
 
 variable "data_disk_params" {
-  type = list(object({
+  type = map(object({
+    name       = string
     diskSizeGB = number
     dynamic    = bool
   }))
-  default     = []
+  default     = {}
   description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
 }
 

@@ -65,7 +65,7 @@ data "azapi_resource" "logical_network" {
 # with a data source.
 module "test" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # source             = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
   enable_telemetry      = var.enable_telemetry
   count                 = var.download_win_server_image ? 1 : 0
   resource_group_name   = var.resource_group_name
@@ -157,13 +157,14 @@ Description: The array description of the dataDisks to attach to the vm. Provide
 Type:
 
 ```hcl
-list(object({
+map(object({
+    name       = string
     diskSizeGB = number
     dynamic    = bool
   }))
 ```
 
-Default: `[]`
+Default: `{}`
 
 ### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
 
