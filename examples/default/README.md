@@ -26,20 +26,6 @@ provider "azurerm" {
   }
 }
 
-
-## Section to provide a random Azure region for the resource group
-# This allows us to randomize the region for the resource group.
-module "regions" {
-  source  = "Azure/avm-utl-regions/azurerm"
-  version = "~> 0.1"
-}
-
-# This ensures we have unique CAF compliant names for our resources.
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "~> 0.3"
-}
-
 # This is required for resource modules
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
@@ -70,8 +56,9 @@ data "azapi_resource" "logical_network" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
+  # version            = "~>0.0"
+
   enable_telemetry      = var.enable_telemetry
-  count                 = var.download_win_server_image ? 1 : 0
   resource_group_name   = var.resource_group_name
   location              = data.azurerm_resource_group.rg.location
   custom_location_id    = data.azapi_resource.customlocation.id
@@ -202,14 +189,6 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_download_win_server_image"></a> [download\_win\_server\_image](#input\_download\_win\_server\_image)
-
-Description: Whether to download Windows Server image
-
-Type: `bool`
-
-Default: `true`
-
 ### <a name="input_dynamic_memory"></a> [dynamic\_memory](#input\_dynamic\_memory)
 
 Description: Enable dynamic memory
@@ -291,18 +270,6 @@ No outputs.
 ## Modules
 
 The following Modules are called:
-
-### <a name="module_naming"></a> [naming](#module\_naming)
-
-Source: Azure/naming/azurerm
-
-Version: ~> 0.3
-
-### <a name="module_regions"></a> [regions](#module\_regions)
-
-Source: Azure/avm-utl-regions/azurerm
-
-Version: ~> 0.1
 
 ### <a name="module_test"></a> [test](#module\_test)
 

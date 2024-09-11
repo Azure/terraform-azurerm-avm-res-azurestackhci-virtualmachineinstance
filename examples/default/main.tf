@@ -20,20 +20,6 @@ provider "azurerm" {
   }
 }
 
-
-## Section to provide a random Azure region for the resource group
-# This allows us to randomize the region for the resource group.
-module "regions" {
-  source  = "Azure/avm-utl-regions/azurerm"
-  version = "~> 0.1"
-}
-
-# This ensures we have unique CAF compliant names for our resources.
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "~> 0.3"
-}
-
 # This is required for resource modules
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
@@ -64,8 +50,9 @@ data "azapi_resource" "logical_network" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
+  # version            = "~>0.0"
+
   enable_telemetry      = var.enable_telemetry
-  count                 = var.download_win_server_image ? 1 : 0
   resource_group_name   = var.resource_group_name
   location              = data.azurerm_resource_group.rg.location
   custom_location_id    = data.azapi_resource.customlocation.id

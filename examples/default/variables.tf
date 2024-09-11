@@ -72,12 +72,6 @@ variable "domain_to_join" {
   description = "Optional Domain name to join - specify to join the VM to domain. example: contoso.com - If left empty, ou, username and password parameters will not be evaluated in the deployment."
 }
 
-variable "download_win_server_image" {
-  type        = bool
-  default     = true
-  description = "Whether to download Windows Server image"
-}
-
 variable "dynamic_memory" {
   type        = bool
   default     = false
