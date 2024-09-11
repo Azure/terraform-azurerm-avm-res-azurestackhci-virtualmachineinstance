@@ -50,6 +50,8 @@ data "azapi_resource" "logical_network" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
+  # version            = "~>0.0"
+
   enable_telemetry      = var.enable_telemetry
   resource_group_name   = var.resource_group_name
   location              = data.azurerm_resource_group.rg.location
