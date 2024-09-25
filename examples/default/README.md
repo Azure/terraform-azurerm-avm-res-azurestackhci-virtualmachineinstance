@@ -37,9 +37,9 @@ data "azapi_resource" "customlocation" {
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "win_server_image" {
-  type      = "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview"
-  name      = "winServer2022-01"
+data "azapi_resource" "vm_image" {
+  type      = var.is_marketplace_image ? "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview" : "Microsoft.AzureStackHCI/galleryImages@2023-09-01-preview"
+  name      = var.image_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
@@ -63,7 +63,7 @@ module "test" {
   location              = data.azurerm_resource_group.rg.location
   custom_location_id    = data.azapi_resource.customlocation.id
   name                  = var.name
-  image_id              = data.azapi_resource.win_server_image.id
+  image_id              = data.azapi_resource.vm_image.id
   logical_network_id    = data.azapi_resource.logical_network.id
   admin_username        = var.vm_admin_username
   admin_password        = var.vm_admin_password
@@ -99,7 +99,7 @@ The following resources are used by this module:
 
 - [azapi_resource.customlocation](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
 - [azapi_resource.logical_network](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
-- [azapi_resource.win_server_image](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.vm_image](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
 - [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 <!-- markdownlint-disable MD013 -->

@@ -8,6 +8,17 @@ variable "logical_network_name" {
   description = "The name of the logical network"
 }
 
+variable "is_marketplace_image" {
+  type        = bool
+  default     = true
+  description = "Set to true if the referenced image is from Azure Marketplace."
+}
+
+variable "image_name" {
+  type = string
+  description = "The name of the image"
+}
+
 variable "name" {
   type        = string
   description = "Name of the VM resource"
