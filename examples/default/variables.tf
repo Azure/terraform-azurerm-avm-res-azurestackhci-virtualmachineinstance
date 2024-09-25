@@ -15,7 +15,7 @@ variable "is_marketplace_image" {
 }
 
 variable "image_name" {
-  type = string
+  type        = string
   description = "The name of the image"
 }
 
