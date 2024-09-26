@@ -113,6 +113,12 @@ Description: The name of the custom location.
 
 Type: `string`
 
+### <a name="input_image_name"></a> [image\_name](#input\_image\_name)
+
+Description: The name of the image
+
+Type: `string`
+
 ### <a name="input_logical_network_name"></a> [logical\_network\_name](#input\_logical\_network\_name)
 
 Description: The name of the logical network
@@ -226,6 +232,14 @@ Default: `512`
 Description: This variable controls whether or not telemetry is enabled for the module.  
 For more information see <https://aka.ms/avm/telemetryinfo>.  
 If it is set to false, then no telemetry will be collected.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_is_marketplace_image"></a> [is\_marketplace\_image](#input\_is\_marketplace\_image)
+
+Description: Set to true if the referenced image is from Azure Marketplace.
 
 Type: `bool`
 

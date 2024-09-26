@@ -3,20 +3,14 @@ variable "custom_location_name" {
   description = "The name of the custom location."
 }
 
-variable "logical_network_name" {
-  type        = string
-  description = "The name of the logical network"
-}
-
-variable "is_marketplace_image" {
-  type        = bool
-  default     = true
-  description = "Set to true if the referenced image is from Azure Marketplace."
-}
-
 variable "image_name" {
   type        = string
   description = "The name of the image"
+}
+
+variable "logical_network_name" {
+  type        = string
+  description = "The name of the logical network"
 }
 
 variable "name" {
@@ -115,6 +109,12 @@ This variable controls whether or not telemetry is enabled for the module.
 For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 DESCRIPTION
+}
+
+variable "is_marketplace_image" {
+  type        = bool
+  default     = true
+  description = "Set to true if the referenced image is from Azure Marketplace."
 }
 
 variable "memory_mb" {
