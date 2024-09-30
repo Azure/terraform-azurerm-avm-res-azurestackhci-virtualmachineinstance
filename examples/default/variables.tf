@@ -1,16 +1,16 @@
 variable "custom_location_name" {
   type        = string
-  description = "The name of the custom location."
+  description = "Enter the custom location name of your HCI cluster."
 }
 
 variable "image_name" {
   type        = string
-  description = "The name of the image"
+  description = "Enter the name of the image you would like to use for the VM deployment"
 }
 
 variable "logical_network_name" {
   type        = string
-  description = "The name of the logical network"
+  description = "Enter the name of the logical network you would like to use for the VM deployment"
 }
 
 variable "name" {

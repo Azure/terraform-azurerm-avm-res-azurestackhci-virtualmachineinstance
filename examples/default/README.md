@@ -109,19 +109,19 @@ The following input variables are required:
 
 ### <a name="input_custom_location_name"></a> [custom\_location\_name](#input\_custom\_location\_name)
 
-Description: The name of the custom location.
+Description: Enter the custom location name of your HCI cluster.
 
 Type: `string`
 
 ### <a name="input_image_name"></a> [image\_name](#input\_image\_name)
 
-Description: The name of the image
+Description: Enter the name of the image you would like to use for the VM deployment
 
 Type: `string`
 
 ### <a name="input_logical_network_name"></a> [logical\_network\_name](#input\_logical\_network\_name)
 
-Description: The name of the logical network
+Description: Enter the name of the logical network you would like to use for the VM deployment
 
 Type: `string`
 
