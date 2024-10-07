@@ -184,7 +184,7 @@ Default: `true`
 
 ### <a name="input_http_proxy"></a> [http\_proxy](#input\_http\_proxy)
 
-Description: HTTP URLs for proxy server. An example URL is:http://proxy.example.com:3128.
+Description: HTTP URL for proxy server. An example URL is:http://proxy.example.com:3128.
 
 Type: `string`
 
@@ -192,7 +192,7 @@ Default: `null`
 
 ### <a name="input_https_proxy"></a> [https\_proxy](#input\_https\_proxy)
 
-Description: HTTPS URLs for proxy server. The server may still use an HTTP address as shown in this example: http://proxy.example.com:3128.
+Description: HTTPS URL for proxy server. The server may still use an HTTP address as shown in this example: http://proxy.example.com:3128.
 
 Type: `string`
 
@@ -298,7 +298,7 @@ Default: `null`
 
 ### <a name="input_trusted_ca"></a> [trusted\_ca](#input\_trusted\_ca)
 
-Description: Name of the certificate file path for your proxy server.
+Description: Alternative CA cert to use for connecting to proxy servers.
 
 Type: `string`
 

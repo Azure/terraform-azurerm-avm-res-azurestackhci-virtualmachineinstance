@@ -137,14 +137,14 @@ DESCRIPTION
 variable "http_proxy" {
   type        = string
   default     = null
-  description = "HTTP URLs for proxy server. An example URL is:http://proxy.example.com:3128."
+  description = "HTTP URL for proxy server. An example URL is:http://proxy.example.com:3128."
   sensitive   = true
 }
 
 variable "https_proxy" {
   type        = string
   default     = null
-  description = "HTTPS URLs for proxy server. The server may still use an HTTP address as shown in this example: http://proxy.example.com:3128."
+  description = "HTTPS URL for proxy server. The server may still use an HTTP address as shown in this example: http://proxy.example.com:3128."
   sensitive   = true
 }
 
@@ -238,7 +238,7 @@ variable "tags" {
 variable "trusted_ca" {
   type        = string
   default     = null
-  description = "Name of the certificate file path for your proxy server."
+  description = "Alternative CA cert to use for connecting to proxy servers."
 }
 
 variable "user_storage_id" {
