@@ -79,6 +79,17 @@ module "test" {
   domain_target_ou      = var.domain_target_ou
   domain_join_user_name = var.domain_join_user_name
   domain_join_password  = var.domain_join_password
+
+
+  # # Optional block to configure a proxy server for your VM
+  # http_proxy = "http://username:password@proxyserver.contoso.com:3128"
+  # https_proxy = "https://username:password@proxyserver.contoso.com:3128"
+  # no_proxy = [
+  #     "localhost",
+  #     "127.0.0.1"
+  # ]
+  # trusted_ca = "C:\\Users\\Palomino\\proxycert.crt"
+
 }
 ```
 

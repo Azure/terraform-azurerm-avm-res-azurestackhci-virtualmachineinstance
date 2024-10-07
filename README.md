@@ -182,6 +182,22 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_http_proxy"></a> [http\_proxy](#input\_http\_proxy)
+
+Description: HTTP URLs for proxy server. An example URL is:http://proxy.example.com:3128.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_https_proxy"></a> [https\_proxy](#input\_https\_proxy)
+
+Description: HTTPS URLs for proxy server. The server may still use an HTTP address as shown in this example: http://proxy.example.com:3128.
+
+Type: `string`
+
+Default: `null`
+
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
 Description: Controls the Resource Lock configuration for this resource. The following properties can be specified:
@@ -226,6 +242,14 @@ Type: `number`
 
 Default: `8192`
 
+### <a name="input_no_proxy"></a> [no\_proxy](#input\_no\_proxy)
+
+Description: URLs, which can bypass proxy. Typical examples would be [localhost,127.0.0.1,.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.0.0.0/8]
+
+Type: `list(string)`
+
+Default: `[]`
+
 ### <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address)
 
 Description: The private IP address of the NIC
@@ -269,6 +293,14 @@ Default: `{}`
 Description: (Optional) Tags of the resource.
 
 Type: `map(string)`
+
+Default: `null`
+
+### <a name="input_trusted_ca"></a> [trusted\_ca](#input\_trusted\_ca)
+
+Description: Name of the certificate file path for your proxy server.
+
+Type: `string`
 
 Default: `null`
 

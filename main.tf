@@ -57,6 +57,12 @@ resource "azapi_resource" "virtual_machine" {
           targetMemoryBuffer = var.dynamic_memory_buffer
         }
       }
+      httpProxyConfig = var.http_proxy == null && var.https_proxy == null ? null : {
+        httpProxy  = var.http_proxy
+        httpsProxy = var.https_proxy
+        noProxy    = var.no_proxy
+        trustedCa  = var.trusted_ca
+      }
       osProfile = {
         adminUsername = var.admin_username
         adminPassword = var.admin_password

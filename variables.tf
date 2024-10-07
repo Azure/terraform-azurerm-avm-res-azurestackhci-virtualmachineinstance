@@ -134,6 +134,20 @@ DESCRIPTION
   nullable    = false
 }
 
+variable "http_proxy" {
+  type        = string
+  default     = null
+  description = "HTTP URLs for proxy server. An example URL is:http://proxy.example.com:3128."
+  sensitive   = true
+}
+
+variable "https_proxy" {
+  type        = string
+  default     = null
+  description = "HTTPS URLs for proxy server. The server may still use an HTTP address as shown in this example: http://proxy.example.com:3128."
+  sensitive   = true
+}
+
 variable "lock" {
   type = object({
     kind = string
@@ -175,6 +189,12 @@ variable "memory_mb" {
   description = "Memory in MB"
 }
 
+variable "no_proxy" {
+  type        = list(string)
+  default     = []
+  description = "URLs, which can bypass proxy. Typical examples would be [localhost,127.0.0.1,.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.0.0.0/8]"
+}
+
 variable "private_ip_address" {
   type        = string
   default     = ""
@@ -213,6 +233,12 @@ variable "tags" {
   type        = map(string)
   default     = null
   description = "(Optional) Tags of the resource."
+}
+
+variable "trusted_ca" {
+  type        = string
+  default     = null
+  description = "Name of the certificate file path for your proxy server."
 }
 
 variable "user_storage_id" {
