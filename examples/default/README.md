@@ -88,7 +88,7 @@ module "test" {
   #     "localhost",
   #     "127.0.0.1"
   # ]
-  # trusted_ca = "C:\\Users\\Palomino\\proxycert.crt"
+  # trusted_ca = "-----BEGIN CERTIFICATE-----....-----END CERTIFICATE-----"
 
 }
 ```
