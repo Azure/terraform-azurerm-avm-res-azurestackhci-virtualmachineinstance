@@ -31,9 +31,9 @@ data "azapi_resource" "customlocation" {
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "win_server_image" {
-  type      = "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview"
-  name      = "winServer2022-01"
+data "azapi_resource" "vm_image" {
+  type      = var.is_marketplace_image ? "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview" : "Microsoft.AzureStackHCI/galleryImages@2023-09-01-preview"
+  name      = var.image_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
@@ -57,7 +57,7 @@ module "test" {
   location              = data.azurerm_resource_group.rg.location
   custom_location_id    = data.azapi_resource.customlocation.id
   name                  = var.name
-  image_id              = data.azapi_resource.win_server_image.id
+  image_id              = data.azapi_resource.vm_image.id
   logical_network_id    = data.azapi_resource.logical_network.id
   admin_username        = var.vm_admin_username
   admin_password        = var.vm_admin_password
@@ -73,4 +73,15 @@ module "test" {
   domain_target_ou      = var.domain_target_ou
   domain_join_user_name = var.domain_join_user_name
   domain_join_password  = var.domain_join_password
+
+
+  # # Optional block to configure a proxy server for your VM
+  # http_proxy = "http://username:password@proxyserver.contoso.com:3128"
+  # https_proxy = "https://username:password@proxyserver.contoso.com:3128"
+  # no_proxy = [
+  #     "localhost",
+  #     "127.0.0.1"
+  # ]
+  # trusted_ca = "-----BEGIN CERTIFICATE-----....-----END CERTIFICATE-----"
+
 }

@@ -37,9 +37,9 @@ data "azapi_resource" "customlocation" {
   parent_id = data.azurerm_resource_group.rg.id
 }
 
-data "azapi_resource" "win_server_image" {
-  type      = "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview"
-  name      = "winServer2022-01"
+data "azapi_resource" "vm_image" {
+  type      = var.is_marketplace_image ? "Microsoft.AzureStackHCI/marketplaceGalleryImages@2023-09-01-preview" : "Microsoft.AzureStackHCI/galleryImages@2023-09-01-preview"
+  name      = var.image_name
   parent_id = data.azurerm_resource_group.rg.id
 }
 
@@ -63,7 +63,7 @@ module "test" {
   location              = data.azurerm_resource_group.rg.location
   custom_location_id    = data.azapi_resource.customlocation.id
   name                  = var.name
-  image_id              = data.azapi_resource.win_server_image.id
+  image_id              = data.azapi_resource.vm_image.id
   logical_network_id    = data.azapi_resource.logical_network.id
   admin_username        = var.vm_admin_username
   admin_password        = var.vm_admin_password
@@ -79,6 +79,17 @@ module "test" {
   domain_target_ou      = var.domain_target_ou
   domain_join_user_name = var.domain_join_user_name
   domain_join_password  = var.domain_join_password
+
+
+  # # Optional block to configure a proxy server for your VM
+  # http_proxy = "http://username:password@proxyserver.contoso.com:3128"
+  # https_proxy = "https://username:password@proxyserver.contoso.com:3128"
+  # no_proxy = [
+  #     "localhost",
+  #     "127.0.0.1"
+  # ]
+  # trusted_ca = "-----BEGIN CERTIFICATE-----....-----END CERTIFICATE-----"
+
 }
 ```
 
@@ -99,7 +110,7 @@ The following resources are used by this module:
 
 - [azapi_resource.customlocation](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
 - [azapi_resource.logical_network](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
-- [azapi_resource.win_server_image](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.vm_image](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
 - [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -109,13 +120,19 @@ The following input variables are required:
 
 ### <a name="input_custom_location_name"></a> [custom\_location\_name](#input\_custom\_location\_name)
 
-Description: The name of the custom location.
+Description: Enter the custom location name of your HCI cluster.
+
+Type: `string`
+
+### <a name="input_image_name"></a> [image\_name](#input\_image\_name)
+
+Description: Enter the name of the image you would like to use for the VM deployment
 
 Type: `string`
 
 ### <a name="input_logical_network_name"></a> [logical\_network\_name](#input\_logical\_network\_name)
 
-Description: The name of the logical network
+Description: Enter the name of the logical network you would like to use for the VM deployment
 
 Type: `string`
 
@@ -226,6 +243,14 @@ Default: `512`
 Description: This variable controls whether or not telemetry is enabled for the module.  
 For more information see <https://aka.ms/avm/telemetryinfo>.  
 If it is set to false, then no telemetry will be collected.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_is_marketplace_image"></a> [is\_marketplace\_image](#input\_is\_marketplace\_image)
+
+Description: Set to true if the referenced image is from Azure Marketplace.
 
 Type: `bool`
 

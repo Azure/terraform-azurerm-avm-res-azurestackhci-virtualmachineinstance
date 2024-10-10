@@ -1,11 +1,16 @@
 variable "custom_location_name" {
   type        = string
-  description = "The name of the custom location."
+  description = "Enter the custom location name of your HCI cluster."
+}
+
+variable "image_name" {
+  type        = string
+  description = "Enter the name of the image you would like to use for the VM deployment"
 }
 
 variable "logical_network_name" {
   type        = string
-  description = "The name of the logical network"
+  description = "Enter the name of the logical network you would like to use for the VM deployment"
 }
 
 variable "name" {
@@ -104,6 +109,12 @@ This variable controls whether or not telemetry is enabled for the module.
 For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 DESCRIPTION
+}
+
+variable "is_marketplace_image" {
+  type        = bool
+  default     = true
+  description = "Set to true if the referenced image is from Azure Marketplace."
 }
 
 variable "memory_mb" {
