@@ -21,4 +21,10 @@ resource "azapi_resource" "nic" {
   location  = var.location
   name      = "${var.name}-nic"
   parent_id = data.azurerm_resource_group.rg.id
+  lifecycle {
+    ignore_changes = [
+      body.properties.ipConfigurations[0].name,
+      body.properties.ipConfigurations[0].properties.privateIPAddress,
+    ]
+  }
 }
