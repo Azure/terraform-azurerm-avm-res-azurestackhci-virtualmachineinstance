@@ -96,4 +96,10 @@ resource "azapi_resource" "virtual_machine" {
   timeouts {
     create = "2h"
   }
+
+  lifecycle {
+    ignore_changes = [
+      body.properties.storageProfile.vmConfigStoragePathId,
+    ]
+  }
 }
