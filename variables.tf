@@ -189,6 +189,12 @@ variable "memory_mb" {
   description = "Memory in MB"
 }
 
+variable "nic_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the nic."
+}
+
 variable "no_proxy" {
   type        = list(string)
   default     = []
@@ -231,7 +237,7 @@ DESCRIPTION
 variable "tags" {
   type        = map(string)
   default     = null
-  description = "(Optional) Tags of the resource."
+  description = "(Optional) Tags of the arc vm."
 }
 
 variable "trusted_ca" {

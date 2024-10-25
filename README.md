@@ -242,6 +242,14 @@ Type: `number`
 
 Default: `8192`
 
+### <a name="input_nic_tags"></a> [nic\_tags](#input\_nic\_tags)
+
+Description: (Optional) Tags of the nic.
+
+Type: `map(string)`
+
+Default: `null`
+
 ### <a name="input_no_proxy"></a> [no\_proxy](#input\_no\_proxy)
 
 Description: URLs, which can bypass proxy. Typical examples would be [localhost,127.0.0.1,.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.0.0.0/8]
@@ -290,7 +298,7 @@ Default: `{}`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
-Description: (Optional) Tags of the resource.
+Description: (Optional) Tags of the arc vm.
 
 Type: `map(string)`
 
