@@ -58,10 +58,20 @@ variable "name" {
   }
 }
 
+variable "nic_tags" {
+  type        = map(string)
+  description = "(Optional) Tags of the nic."
+}
+
 # This is required for most resource modules
 variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "(Optional) Tags of the arc vm."
 }
 
 variable "data_disk_params" {
@@ -226,12 +236,6 @@ A map of role assignments to create on this resource. The map key is deliberatel
 > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
 DESCRIPTION
   nullable    = false
-}
-
-variable "tags" {
-  type        = map(string)
-  default     = null
-  description = "(Optional) Tags of the resource."
 }
 
 variable "trusted_ca" {

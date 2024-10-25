@@ -82,11 +82,23 @@ Description: Name of the VM resource
 
 Type: `string`
 
+### <a name="input_nic_tags"></a> [nic\_tags](#input\_nic\_tags)
+
+Description: (Optional) Tags of the nic.
+
+Type: `map(string)`
+
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
 Description: The resource group where the resources will be deployed.
 
 Type: `string`
+
+### <a name="input_tags"></a> [tags](#input\_tags)
+
+Description: (Optional) Tags of the arc vm.
+
+Type: `map(string)`
 
 ## Optional Inputs
 
@@ -287,14 +299,6 @@ map(object({
 ```
 
 Default: `{}`
-
-### <a name="input_tags"></a> [tags](#input\_tags)
-
-Description: (Optional) Tags of the resource.
-
-Type: `map(string)`
-
-Default: `null`
 
 ### <a name="input_trusted_ca"></a> [trusted\_ca](#input\_trusted\_ca)
 

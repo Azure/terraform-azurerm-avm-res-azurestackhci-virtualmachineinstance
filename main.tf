@@ -33,6 +33,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
   location  = var.location
   name      = var.name
   parent_id = data.azurerm_resource_group.rg.id
+  tags      = var.tags
 
   identity {
     type = "SystemAssigned"
@@ -92,7 +93,6 @@ resource "azapi_resource" "virtual_machine" {
   }
   name      = "default" # value must be 'default' per 2023-09-01-preview
   parent_id = azapi_resource.hybrid_compute_machine.id
-  tags      = var.tags
 
   timeouts {
     create = "2h"
