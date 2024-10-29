@@ -64,6 +64,12 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
+variable "auto_upgrade_minor_version" {
+  type        = bool
+  default     = true
+  description = "Whether to enable auto upgrade minor version"
+}
+
 variable "data_disk_params" {
   type = map(object({
     name       = string
@@ -85,6 +91,12 @@ variable "domain_join_user_name" {
   type        = string
   default     = ""
   description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain_to_join' is specified."
+}
+
+variable "domain_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the domain."
 }
 
 variable "domain_target_ou" {
@@ -244,6 +256,12 @@ variable "trusted_ca" {
   type        = string
   default     = null
   description = "Alternative CA cert to use for connecting to proxy servers."
+}
+
+variable "type_handler_version" {
+  type        = string
+  default     = "1.3"
+  description = "The version of the type handler to use"
 }
 
 variable "user_storage_id" {
