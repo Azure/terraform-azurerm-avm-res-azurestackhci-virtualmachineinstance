@@ -1,4 +1,3 @@
-# TODO: insert locals here.
 locals {
   domain_join_password = var.domain_join_password != null ? var.domain_join_password : ""
   dynamic_memory_config_full = var.dynamic_memory ? {
