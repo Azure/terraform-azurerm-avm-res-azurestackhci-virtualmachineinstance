@@ -49,14 +49,10 @@ resource "azapi_resource" "virtual_machine" {
     }
     properties = {
       hardwareProfile = {
-        vmSize     = "Custom"
-        processors = var.v_cpu_count
-        memoryMB   = var.memory_mb
-        dynamicMemoryConfig = var.dynamic_memory ? null : {
-          maximumMemoryMB    = var.dynamic_memory_max
-          minimumMemoryMB    = var.dynamic_memory_min
-          targetMemoryBuffer = var.dynamic_memory_buffer
-        }
+        vmSize              = "Custom"
+        processors          = var.v_cpu_count
+        memoryMB            = var.memory_mb
+        dynamicMemoryConfig = local.dynamic_memory_config_omit_null
       }
       httpProxyConfig = var.http_proxy == null && var.https_proxy == null ? null : {
         httpProxy  = var.http_proxy
