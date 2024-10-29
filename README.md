@@ -116,6 +116,14 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_domain_join_extension_tags"></a> [domain\_join\_extension\_tags](#input\_domain\_join\_extension\_tags)
+
+Description: (Optional) Tags of the domain join extension.
+
+Type: `map(string)`
+
+Default: `null`
+
 ### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
 
 Description: Optional Password of User with permissions to join the domain. - Required if 'domain\_to\_join' is specified.
@@ -131,14 +139,6 @@ Description: Optional User Name with permissions to join the domain. example: do
 Type: `string`
 
 Default: `""`
-
-### <a name="input_domain_tags"></a> [domain\_tags](#input\_domain\_tags)
-
-Description: (Optional) Tags of the domain.
-
-Type: `map(string)`
-
-Default: `null`
 
 ### <a name="input_domain_target_ou"></a> [domain\_target\_ou](#input\_domain\_target\_ou)
 

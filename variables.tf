@@ -80,6 +80,12 @@ variable "data_disk_params" {
   description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
 }
 
+variable "domain_join_extension_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the domain join extension."
+}
+
 variable "domain_join_password" {
   type        = string
   default     = null
@@ -91,12 +97,6 @@ variable "domain_join_user_name" {
   type        = string
   default     = ""
   description = "Optional User Name with permissions to join the domain. example: domain-joiner - Required if 'domain_to_join' is specified."
-}
-
-variable "domain_tags" {
-  type        = map(string)
-  default     = null
-  description = "(Optional) Tags of the domain."
 }
 
 variable "domain_target_ou" {
