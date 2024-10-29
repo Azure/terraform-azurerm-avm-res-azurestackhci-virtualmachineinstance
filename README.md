@@ -92,6 +92,14 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
+### <a name="input_auto_upgrade_minor_version"></a> [auto\_upgrade\_minor\_version](#input\_auto\_upgrade\_minor\_version)
+
+Description: Whether to enable auto upgrade minor version
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_data_disk_params"></a> [data\_disk\_params](#input\_data\_disk\_params)
 
 Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
@@ -107,6 +115,14 @@ map(object({
 ```
 
 Default: `{}`
+
+### <a name="input_domain_join_extension_tags"></a> [domain\_join\_extension\_tags](#input\_domain\_join\_extension\_tags)
+
+Description: (Optional) Tags of the domain join extension.
+
+Type: `map(string)`
+
+Default: `null`
 
 ### <a name="input_domain_join_password"></a> [domain\_join\_password](#input\_domain\_join\_password)
 
@@ -146,7 +162,7 @@ Description: Enable dynamic memory
 
 Type: `bool`
 
-Default: `false`
+Default: `true`
 
 ### <a name="input_dynamic_memory_buffer"></a> [dynamic\_memory\_buffer](#input\_dynamic\_memory\_buffer)
 
@@ -311,6 +327,14 @@ Description: Alternative CA cert to use for connecting to proxy servers.
 Type: `string`
 
 Default: `null`
+
+### <a name="input_type_handler_version"></a> [type\_handler\_version](#input\_type\_handler\_version)
+
+Description: The version of the type handler to use
+
+Type: `string`
+
+Default: `"1.3"`
 
 ### <a name="input_user_storage_id"></a> [user\_storage\_id](#input\_user\_storage\_id)
 

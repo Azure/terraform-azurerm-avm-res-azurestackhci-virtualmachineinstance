@@ -212,7 +212,7 @@ Description: Enable dynamic memory
 
 Type: `bool`
 
-Default: `false`
+Default: `true`
 
 ### <a name="input_dynamic_memory_buffer"></a> [dynamic\_memory\_buffer](#input\_dynamic\_memory\_buffer)
 

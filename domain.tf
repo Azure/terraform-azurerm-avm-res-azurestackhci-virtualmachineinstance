@@ -6,8 +6,8 @@ resource "azapi_resource" "domain_join" {
     properties = {
       publisher               = "Microsoft.Compute"
       type                    = "JsonADDomainExtension"
-      typeHandlerVersion      = "1.3"
-      autoUpgradeMinorVersion = true
+      typeHandlerVersion      = var.type_handler_version
+      autoUpgradeMinorVersion = var.auto_upgrade_minor_version
       settings = {
         name    = var.domain_to_join
         OUPath  = var.domain_target_ou
@@ -23,6 +23,7 @@ resource "azapi_resource" "domain_join" {
   location  = var.location
   name      = "domainJoinExtension"
   parent_id = azapi_resource.hybrid_compute_machine.id
+  tags      = var.domain_join_extension_tags
 
   depends_on = [
     azapi_resource.virtual_machine
