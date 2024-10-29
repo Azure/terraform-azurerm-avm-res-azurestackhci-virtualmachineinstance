@@ -113,7 +113,7 @@ variable "domain_to_join" {
 
 variable "dynamic_memory" {
   type        = bool
-  default     = false
+  default     = true
   description = "Enable dynamic memory"
 }
 
