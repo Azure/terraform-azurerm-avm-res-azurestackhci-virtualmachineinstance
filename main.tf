@@ -80,7 +80,9 @@ resource "azapi_resource" "virtual_machine" {
         }
       }
       securityProfile = {
-        uefiSettings = var.uefi_settings_config == null ? {} : var.uefi_settings_config
+        uefiSettings ={
+          secureBootEnabled = var.secure_boot_enabled
+        }
       }
       storageProfile = {
         vmConfigStoragePathId = var.user_storage_id == "" ? null : var.user_storage_id
@@ -90,7 +92,9 @@ resource "azapi_resource" "virtual_machine" {
         dataDisks = [for i in range(length(var.data_disk_params)) : {
           id = azapi_resource.data_disks[i].id
         }]
-        osDisk = var.storage_profile_os_disk_config == null ? {} : var.storage_profile_os_disk_config
+        osDisk = {
+          osType = var.os_type
+        }
       }
       networkProfile = {
         networkInterfaces = [

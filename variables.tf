@@ -298,19 +298,14 @@ variable "linux_ssh_config" {
   default = null
 }
 
-variable "storage_profile_os_disk_config" {
-  description = "OS Disk configuration with id and osType"
-  type = object({
-    id     = string
-    osType = string
-  })
-  default = null
+variable "os_type" {
+  type        = string
+  default     = "Windows"
+  description = "The OS type of the VM. Possible values are 'Windows' and 'Linux'."
 }
 
-variable "uefi_settings_config" {
-  description = "UEFI settings configuration with secureBootEnabled"
-  type = object({
-    secureBootEnabled = bool
-  })
-  default = null
+variable "secure_boot_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable secure boot"
 }
