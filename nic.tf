@@ -16,6 +16,7 @@ resource "azapi_resource" "nic" {
           privateIPAddress = var.private_ip_address == "" ? null : var.private_ip_address
         }
       }]
+      macAddress = null
     }
   }
   location  = var.location

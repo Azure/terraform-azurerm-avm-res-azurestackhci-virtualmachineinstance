@@ -54,7 +54,7 @@ resource "azapi_resource" "virtual_machine" {
       type = "CustomLocation"
       name = var.custom_location_id
     }
-    properties = { for key, value in local.virtual_machine_properties : key => value if value != null }
+    properties = local.virtual_machine_properties_final
   }
   name      = "default" # value must be 'default' per 2023-09-01-preview
   parent_id = azapi_resource.hybrid_compute_machine.id

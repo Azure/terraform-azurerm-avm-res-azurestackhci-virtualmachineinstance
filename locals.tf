@@ -11,7 +11,7 @@ locals {
   }
   dynamic_memory_config_omit_null    = { for k, v in local.dynamic_memory_config_full : k => v if v != null }
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
-  virtual_machine_properties = {
+  virtual_machine_properties_base = {
     hardwareProfile = {
       vmSize              = "Custom"
       processors          = var.v_cpu_count
@@ -25,9 +25,8 @@ locals {
       trustedCa  = var.trusted_ca
     }
     osProfile = {
-      adminUsername = var.admin_username
-      adminPassword = var.admin_password
-      computerName  = var.name
+      # 排除敏感值
+      computerName = var.name
       linuxConfiguration = {
         ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
       }
@@ -62,4 +61,17 @@ locals {
       ]
     }
   }
+  virtual_machine_properties_filtered = { for key, value in local.virtual_machine_properties_base : key => value if value != null }
+  virtual_machine_properties_final = merge(
+    local.virtual_machine_properties_filtered,
+    {
+      osProfile = merge(
+        local.virtual_machine_properties_filtered.osProfile,
+        {
+          adminUsername = var.admin_username,
+          adminPassword = var.admin_password,
+        }
+      )
+    }
+  )
 }
