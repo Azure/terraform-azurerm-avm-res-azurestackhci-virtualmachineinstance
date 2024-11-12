@@ -27,6 +27,7 @@ resource "azapi_resource" "nic" {
     ignore_changes = [
       body.properties.ipConfigurations[0].name,
       body.properties.ipConfigurations[0].properties.privateIPAddress,
+      body.properties.macAddress,
     ]
   }
 }

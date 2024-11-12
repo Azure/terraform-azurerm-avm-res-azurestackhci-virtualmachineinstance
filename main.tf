@@ -38,6 +38,12 @@ resource "azapi_resource" "hybrid_compute_machine" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    ignore_changes = [
+      body.properties,
+    ]
+  }
 }
 
 resource "azapi_resource" "virtual_machine" {
@@ -47,7 +53,7 @@ resource "azapi_resource" "virtual_machine" {
       type = "CustomLocation"
       name = var.custom_location_id
     }
-    properties = {
+    properties = merge({
       hardwareProfile = {
         vmSize              = "Custom"
         processors          = var.v_cpu_count
@@ -64,10 +70,17 @@ resource "azapi_resource" "virtual_machine" {
         adminUsername = var.admin_username
         adminPassword = var.admin_password
         computerName  = var.name
+        linuxConfiguration = {
+          ssh = var.linux_ssh_config
+        }
         windowsConfiguration = {
           provisionVMAgent       = true
           provisionVMConfigAgent = true
+          ssh = var.windows_ssh_config
         }
+      }
+      securityprofile = {
+        uefiSettings = var.uefi_settings_config
       }
       storageProfile = {
         vmConfigStoragePathId = var.user_storage_id == "" ? null : var.user_storage_id
@@ -77,6 +90,7 @@ resource "azapi_resource" "virtual_machine" {
         dataDisks = [for i in range(length(var.data_disk_params)) : {
           id = azapi_resource.data_disks[i].id
         }]
+        osDisk = var.storage_profile_os_disk_config
       }
       networkProfile = {
         networkInterfaces = [
@@ -85,7 +99,7 @@ resource "azapi_resource" "virtual_machine" {
           }
         ]
       }
-    }
+    })
   }
   name      = "default" # value must be 'default' per 2023-09-01-preview
   parent_id = azapi_resource.hybrid_compute_machine.id

@@ -261,7 +261,7 @@ variable "trusted_ca" {
 variable "type_handler_version" {
   type        = string
   default     = "1.3"
-  description = "The version of the type handler to use"
+  description = "The version of the type handler to use."
 }
 
 variable "user_storage_id" {
@@ -274,4 +274,43 @@ variable "v_cpu_count" {
   type        = number
   default     = 2
   description = "Number of vCPUs"
+}
+
+variable "windows_ssh_config" {
+  description = "SSH configuration with public keys for windows."
+  type = object({
+    publicKeys = list(object({
+      keyData = string
+      path    = string
+    }))
+  })
+  default = {}
+}
+
+variable "linux_ssh_config" {
+  description = "SSH configuration with public keys for linux."
+  type = object({
+    publicKeys = list(object({
+      keyData = string
+      path    = string
+    }))
+  })
+  default = {}
+}
+
+variable "storage_profile_os_disk_config" {
+  description = "OS Disk configuration with id and osType"
+  type = object({
+    id     = string
+    osType = string
+  })
+  default = {}
+}
+
+variable "uefi_settings_config" {
+  description = "UEFI settings configuration with secureBootEnabled"
+  type = object({
+    secureBootEnabled = bool
+  })
+  default = {}
 }
