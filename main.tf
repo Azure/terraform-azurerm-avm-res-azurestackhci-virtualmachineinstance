@@ -79,7 +79,7 @@ resource "azapi_resource" "virtual_machine" {
           ssh = var.windows_ssh_config
         }
       }
-      securityprofile = {
+      securityProfile = {
         uefiSettings = var.uefi_settings_config
       }
       storageProfile = {
