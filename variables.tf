@@ -284,7 +284,7 @@ variable "windows_ssh_config" {
       path    = string
     }))
   })
-  default = {}
+  default = null
 }
 
 variable "linux_ssh_config" {
@@ -295,7 +295,7 @@ variable "linux_ssh_config" {
       path    = string
     }))
   })
-  default = {}
+  default = null
 }
 
 variable "storage_profile_os_disk_config" {
@@ -304,7 +304,7 @@ variable "storage_profile_os_disk_config" {
     id     = string
     osType = string
   })
-  default = {}
+  default = null
 }
 
 variable "uefi_settings_config" {
@@ -312,5 +312,5 @@ variable "uefi_settings_config" {
   type = object({
     secureBootEnabled = bool
   })
-  default = {}
+  default = null
 }
