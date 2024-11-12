@@ -71,16 +71,16 @@ resource "azapi_resource" "virtual_machine" {
         adminPassword = var.admin_password
         computerName  = var.name
         linuxConfiguration = {
-          ssh = var.linux_ssh_config
+          ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
         }
         windowsConfiguration = {
           provisionVMAgent       = true
           provisionVMConfigAgent = true
-          ssh = var.windows_ssh_config
+          ssh = var.windows_ssh_config == null ? {} : var.windows_ssh_config
         }
       }
       securityProfile = {
-        uefiSettings = var.uefi_settings_config
+        uefiSettings = var.uefi_settings_config == null ? {} : var.uefi_settings_config
       }
       storageProfile = {
         vmConfigStoragePathId = var.user_storage_id == "" ? null : var.user_storage_id
@@ -90,7 +90,7 @@ resource "azapi_resource" "virtual_machine" {
         dataDisks = [for i in range(length(var.data_disk_params)) : {
           id = azapi_resource.data_disks[i].id
         }]
-        osDisk = var.storage_profile_os_disk_config
+        osDisk = var.storage_profile_os_disk_config == null ? {} : var.storage_profile_os_disk_config
       }
       networkProfile = {
         networkInterfaces = [
