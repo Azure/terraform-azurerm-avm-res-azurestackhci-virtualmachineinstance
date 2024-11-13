@@ -16,7 +16,7 @@ locals {
       vmSize              = "Custom"
       processors          = var.v_cpu_count
       memoryMB            = var.memory_mb
-      dynamicMemoryConfig = length(keys(local.dynamic_memory_config_omit_null)) == 0 ? null : local.dynamic_memory_config_omit_null
+      dynamicMemoryConfig = length(keys(local.dynamic_memory_config_omit_null)) == 0 ? {} : local.dynamic_memory_config_omit_null
     }
     httpProxyConfig = var.http_proxy == null && var.https_proxy == null ? null : {
       httpProxy  = var.http_proxy
