@@ -40,6 +40,8 @@ resource "azapi_resource" "hybrid_compute_machine" {
     type = "SystemAssigned"
   }
 
+  schema_validation_enabled = false
+
   lifecycle {
     ignore_changes = [
       body.properties,

@@ -25,7 +25,7 @@ locals {
       trustedCa  = var.trusted_ca
     }
     osProfile = {
-      # 排除敏感值
+      # Exclude sensitive fields
       computerName = var.name
       linuxConfiguration = {
         ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
