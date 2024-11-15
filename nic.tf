@@ -8,7 +8,6 @@ resource "azapi_resource" "nic" {
 
     properties = {
       ipConfigurations = [{
-        name = "${var.name}-ipconfig"
         properties = {
           subnet = {
             id = var.logical_network_id
@@ -16,6 +15,7 @@ resource "azapi_resource" "nic" {
           privateIPAddress = var.private_ip_address == "" ? null : var.private_ip_address
         }
       }]
+      macAddress = null
     }
   }
   location  = var.location
@@ -27,6 +27,7 @@ resource "azapi_resource" "nic" {
     ignore_changes = [
       body.properties.ipConfigurations[0].name,
       body.properties.ipConfigurations[0].properties.privateIPAddress,
+      body.properties.macAddress,
     ]
   }
 }

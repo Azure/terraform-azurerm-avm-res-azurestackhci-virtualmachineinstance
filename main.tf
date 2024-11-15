@@ -29,6 +29,47 @@ resource "azapi_resource" "hybrid_compute_machine" {
   type = "Microsoft.HybridCompute/machines@2023-10-03-preview"
   body = {
     kind = "HCI",
+    properties = {
+      agentUpgrade = {
+        correlationId          = null
+        desiredVersion         = null
+        enableAutomaticUpgrade = null
+      }
+      clientPublicKey = null
+      cloudMetadata   = null
+      licenseProfile = {
+        esuProfile = {
+          licenseAssignmentState = null
+        }
+      }
+      mssqlDiscovered = null
+      osProfile = {
+        linuxConfiguration = {
+          patchSettings = {
+            assessmentMode = null
+            patchMode      = null
+          }
+        }
+        windowsConfiguration = {
+          patchSettings = {
+            assessmentMode = null
+            patchMode      = null
+          }
+        }
+      }
+      osType = null
+      serviceStatuses = {
+        extensionService = {
+          startupType = null
+          status      = null
+        }
+        guestConfigurationService = {
+          startupType = null
+          status      = null
+        }
+      }
+      vmId = null
+    }
   }
   location  = var.location
   name      = var.name
@@ -37,6 +78,29 @@ resource "azapi_resource" "hybrid_compute_machine" {
 
   identity {
     type = "SystemAssigned"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      body.properties.agentUpgrade,
+      body.properties.clientPublicKey,
+      body.properties.cloudMetadata,
+      body.properties.extensions,
+      body.properties.licenseProfile,
+      body.properties.locationData,
+      body.properties.locationData.city,
+      body.properties.locationData.countryOrRegion,
+      body.properties.locationData.district,
+      body.properties.locationData.name,
+      body.properties.mssqlDiscovered,
+      body.properties.osProfile,
+      body.properties.osType,
+      body.properties.parentClusterResourceId,
+      body.properties.privateLinkScopeResourceId,
+      body.properties.serviceStatuses,
+      body.properties.vmId,
+      identity[0].identity_ids,
+    ]
   }
 }
 
@@ -47,45 +111,7 @@ resource "azapi_resource" "virtual_machine" {
       type = "CustomLocation"
       name = var.custom_location_id
     }
-    properties = {
-      hardwareProfile = {
-        vmSize              = "Custom"
-        processors          = var.v_cpu_count
-        memoryMB            = var.memory_mb
-        dynamicMemoryConfig = length(keys(local.dynamic_memory_config_omit_null)) == 0 ? null : local.dynamic_memory_config_omit_null
-      }
-      httpProxyConfig = var.http_proxy == null && var.https_proxy == null ? null : {
-        httpProxy  = var.http_proxy
-        httpsProxy = var.https_proxy
-        noProxy    = var.no_proxy
-        trustedCa  = var.trusted_ca
-      }
-      osProfile = {
-        adminUsername = var.admin_username
-        adminPassword = var.admin_password
-        computerName  = var.name
-        windowsConfiguration = {
-          provisionVMAgent       = true
-          provisionVMConfigAgent = true
-        }
-      }
-      storageProfile = {
-        vmConfigStoragePathId = var.user_storage_id == "" ? null : var.user_storage_id
-        imageReference = {
-          id = var.image_id
-        }
-        dataDisks = [for i in range(length(var.data_disk_params)) : {
-          id = azapi_resource.data_disks[i].id
-        }]
-      }
-      networkProfile = {
-        networkInterfaces = [
-          {
-            id = azapi_resource.nic.id
-          }
-        ]
-      }
-    }
+    properties = local.virtual_machine_properties_all
   }
   name      = "default" # value must be 'default' per 2023-09-01-preview
   parent_id = azapi_resource.hybrid_compute_machine.id
