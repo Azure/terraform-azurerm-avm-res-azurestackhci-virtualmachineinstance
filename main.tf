@@ -43,7 +43,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
   lifecycle {
     ignore_changes = [
       body.properties,
-      identity.identity_ids,
+      identity[0].identity_ids,
     ]
   }
 }
