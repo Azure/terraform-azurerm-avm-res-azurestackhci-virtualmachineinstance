@@ -11,7 +11,20 @@ locals {
   }
   dynamic_memory_config_omit_null    = { for k, v in local.dynamic_memory_config_full : k => v if v != null }
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
-  virtual_machine_properties_base = {
+  virtual_machine_properties_all = merge(
+    local.virtual_machine_properties_omit_null,
+    {
+      osProfile = merge(
+        local.virtual_machine_properties_omit_null.osProfile,
+        {
+          adminUsername = var.admin_username,
+          adminPassword = var.admin_password,
+        }
+      )
+    }
+  )
+  virtual_machine_properties_omit_null = { for key, value in local.virtual_machine_properties_without_auth : key => value if value != null }
+  virtual_machine_properties_without_auth = {
     hardwareProfile = {
       vmSize              = "Custom"
       processors          = var.v_cpu_count
@@ -61,17 +74,4 @@ locals {
       ]
     }
   }
-  virtual_machine_properties_filtered = { for key, value in local.virtual_machine_properties_base : key => value if value != null }
-  virtual_machine_properties_final = merge(
-    local.virtual_machine_properties_filtered,
-    {
-      osProfile = merge(
-        local.virtual_machine_properties_filtered.osProfile,
-        {
-          adminUsername = var.admin_username,
-          adminPassword = var.admin_password,
-        }
-      )
-    }
-  )
 }
