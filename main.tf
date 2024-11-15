@@ -28,8 +28,7 @@ resource "azurerm_role_assignment" "this" {
 resource "azapi_resource" "hybrid_compute_machine" {
   type = "Microsoft.HybridCompute/machines@2023-10-03-preview"
   body = {
-    kind       = "HCI",
-    properties = null,
+    kind = "HCI",
   }
   location  = var.location
   name      = var.name
@@ -42,7 +41,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
 
   lifecycle {
     ignore_changes = [
-      body.properties,
       identity[0].identity_ids,
     ]
   }
