@@ -56,7 +56,45 @@ resource "azapi_resource" "virtual_machine" {
       type = "CustomLocation"
       name = var.custom_location_id
     }
-    properties = local.virtual_machine_properties_final
+    properties = {
+      hardwareProfile = {
+        vmSize              = "Custom"
+        processors          = var.v_cpu_count
+        memoryMB            = var.memory_mb
+        dynamicMemoryConfig = length(keys(local.dynamic_memory_config_omit_null)) == 0 ? null : local.dynamic_memory_config_omit_null
+      }
+      httpProxyConfig = var.http_proxy == null && var.https_proxy == null ? null : {
+        httpProxy  = var.http_proxy
+        httpsProxy = var.https_proxy
+        noProxy    = var.no_proxy
+        trustedCa  = var.trusted_ca
+      }
+      osProfile = {
+        adminUsername = var.admin_username
+        adminPassword = var.admin_password
+        computerName  = var.name
+        windowsConfiguration = {
+          provisionVMAgent       = true
+          provisionVMConfigAgent = true
+        }
+      }
+      storageProfile = {
+        vmConfigStoragePathId = var.user_storage_id == "" ? null : var.user_storage_id
+        imageReference = {
+          id = var.image_id
+        }
+        dataDisks = [for i in range(length(var.data_disk_params)) : {
+          id = azapi_resource.data_disks[i].id
+        }]
+      }
+      networkProfile = {
+        networkInterfaces = [
+          {
+            id = azapi_resource.nic.id
+          }
+        ]
+      }
+    }
   }
   name      = "default" # value must be 'default' per 2023-09-01-preview
   parent_id = azapi_resource.hybrid_compute_machine.id
