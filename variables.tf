@@ -160,6 +160,17 @@ variable "https_proxy" {
   sensitive   = true
 }
 
+variable "linux_ssh_config" {
+  type = object({
+    publicKeys = list(object({
+      keyData = string
+      path    = string
+    }))
+  })
+  default     = null
+  description = "SSH configuration with public keys for linux."
+}
+
 variable "lock" {
   type = object({
     kind = string
@@ -213,6 +224,12 @@ variable "no_proxy" {
   description = "URLs, which can bypass proxy. Typical examples would be [localhost,127.0.0.1,.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.0.0.0/8]"
 }
 
+variable "os_type" {
+  type        = string
+  default     = "Windows"
+  description = "The OS type of the VM. Possible values are 'Windows' and 'Linux'."
+}
+
 variable "private_ip_address" {
   type        = string
   default     = ""
@@ -246,6 +263,12 @@ DESCRIPTION
   nullable    = false
 }
 
+variable "secure_boot_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable secure boot"
+}
+
 variable "tags" {
   type        = map(string)
   default     = null
@@ -277,35 +300,12 @@ variable "v_cpu_count" {
 }
 
 variable "windows_ssh_config" {
+  type = object({
+    publicKeys = list(object({
+      keyData = string
+      path    = string
+    }))
+  })
+  default     = null
   description = "SSH configuration with public keys for windows."
-  type = object({
-    publicKeys = list(object({
-      keyData = string
-      path    = string
-    }))
-  })
-  default = null
-}
-
-variable "linux_ssh_config" {
-  description = "SSH configuration with public keys for linux."
-  type = object({
-    publicKeys = list(object({
-      keyData = string
-      path    = string
-    }))
-  })
-  default = null
-}
-
-variable "os_type" {
-  type        = string
-  default     = "Windows"
-  description = "The OS type of the VM. Possible values are 'Windows' and 'Linux'."
-}
-
-variable "secure_boot_enabled" {
-  type        = bool
-  default     = true
-  description = "Enable secure boot"
 }

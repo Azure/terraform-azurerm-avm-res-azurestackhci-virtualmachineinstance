@@ -214,6 +214,23 @@ Type: `string`
 
 Default: `null`
 
+### <a name="input_linux_ssh_config"></a> [linux\_ssh\_config](#input\_linux\_ssh\_config)
+
+Description: SSH configuration with public keys for linux.
+
+Type:
+
+```hcl
+object({
+    publicKeys = list(object({
+      keyData = string
+      path    = string
+    }))
+  })
+```
+
+Default: `null`
+
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
 Description: Controls the Resource Lock configuration for this resource. The following properties can be specified:
@@ -274,6 +291,14 @@ Type: `list(string)`
 
 Default: `[]`
 
+### <a name="input_os_type"></a> [os\_type](#input\_os\_type)
+
+Description: The OS type of the VM. Possible values are 'Windows' and 'Linux'.
+
+Type: `string`
+
+Default: `"Windows"`
+
 ### <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address)
 
 Description: The private IP address of the NIC
@@ -312,6 +337,14 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_secure_boot_enabled"></a> [secure\_boot\_enabled](#input\_secure\_boot\_enabled)
+
+Description: Enable secure boot
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
 Description: (Optional) Tags of the arc vm.
@@ -330,7 +363,7 @@ Default: `null`
 
 ### <a name="input_type_handler_version"></a> [type\_handler\_version](#input\_type\_handler\_version)
 
-Description: The version of the type handler to use
+Description: The version of the type handler to use.
 
 Type: `string`
 
@@ -351,6 +384,23 @@ Description: Number of vCPUs
 Type: `number`
 
 Default: `2`
+
+### <a name="input_windows_ssh_config"></a> [windows\_ssh\_config](#input\_windows\_ssh\_config)
+
+Description: SSH configuration with public keys for windows.
+
+Type:
+
+```hcl
+object({
+    publicKeys = list(object({
+      keyData = string
+      path    = string
+    }))
+  })
+```
+
+Default: `null`
 
 ## Outputs
 
