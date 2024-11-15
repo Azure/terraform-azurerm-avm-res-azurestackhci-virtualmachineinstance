@@ -39,21 +39,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
       cloudMetadata   = null
       licenseProfile = {
         esuProfile = {
-          assignedLicense = {
-            location = null
-            properties = {
-              licenseDetails = {
-                edition    = null
-                processors = null
-                state      = null
-                target     = null
-                type       = null
-              }
-              licenseType = null
-              tenantId    = null
-            }
-            tags = null
-          }
           licenseAssignmentState = null
         }
       }
