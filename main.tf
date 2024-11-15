@@ -29,6 +29,84 @@ resource "azapi_resource" "hybrid_compute_machine" {
   type = "Microsoft.HybridCompute/machines@2023-10-03-preview"
   body = {
     kind = "HCI",
+    properties = {
+      agentUpgrade = {
+        correlationId          = null
+        desiredVersion         = null
+        enableAutomaticUpgrade = null
+      }
+      clientPublicKey = null
+      cloudMetadata   = null
+      extensions = [
+        {
+          name = null
+          status = {
+            code          = null
+            displayStatus = null
+            level         = null
+            message       = null
+            time          = null
+          }
+          type               = null
+          typeHandlerVersion = null
+        }
+      ]
+      licenseProfile = {
+        esuProfile = {
+          assignedLicense = {
+            location = null
+            properties = {
+              licenseDetails = {
+                edition    = null
+                processors = null
+                state      = null
+                target     = null
+                type       = null
+              }
+              licenseType = null
+              tenantId    = null
+            }
+            tags = null
+          }
+          licenseAssignmentState = null
+        }
+      }
+      locationData = {
+        city            = null
+        countryOrRegion = null
+        district        = null
+        name            = null
+      }
+      mssqlDiscovered = null
+      osProfile = {
+        linuxConfiguration = {
+          patchSettings = {
+            assessmentMode = null
+            patchMode      = null
+          }
+        }
+        windowsConfiguration = {
+          patchSettings = {
+            assessmentMode = null
+            patchMode      = null
+          }
+        }
+      }
+      osType                     = null
+      parentClusterResourceId    = null
+      privateLinkScopeResourceId = null
+      serviceStatuses = {
+        extensionService = {
+          startupType = null
+          status      = null
+        }
+        guestConfigurationService = {
+          startupType = null
+          status      = null
+        }
+      }
+      vmId = null
+    }
   }
   location  = var.location
   name      = var.name
@@ -41,6 +119,19 @@ resource "azapi_resource" "hybrid_compute_machine" {
 
   lifecycle {
     ignore_changes = [
+      body.properties.agentUpgrade,
+      body.properties.clientPublicKey,
+      body.properties.cloudMetadata,
+      body.properties.extensions,
+      body.properties.licenseProfile,
+      body.properties.locationData,
+      body.properties.mssqlDiscovered,
+      body.properties.osProfile,
+      body.properties.osType,
+      body.properties.parentClusterResourceId,
+      body.properties.privateLinkScopeResourceId,
+      body.properties.serviceStatuses,
+      body.properties.vmId,
       identity[0].identity_ids,
     ]
   }
