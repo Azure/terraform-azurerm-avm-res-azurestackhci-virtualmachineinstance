@@ -37,7 +37,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
       }
       clientPublicKey = null
       cloudMetadata   = null
-      extensions = []
       licenseProfile = {
         esuProfile = {
           assignedLicense = {
@@ -57,12 +56,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
           }
           licenseAssignmentState = null
         }
-      }
-      locationData = {
-        city            = null
-        countryOrRegion = null
-        district        = null
-        name            = null
       }
       mssqlDiscovered = null
       osProfile = {
@@ -108,15 +101,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
       body.properties.clientPublicKey,
       body.properties.cloudMetadata,
       body.properties.extensions,
-      # body.properties.extensions[0].name,
-      # body.properties.extensions[0].status,
-      # body.properties.extensions[0].status.code,
-      # body.properties.extensions[0].status.displayStatus,
-      # body.properties.extensions[0].status.level,
-      # body.properties.extensions[0].status.message,
-      # body.properties.extensions[0].status.time,
-      # body.properties.extensions[0].type,
-      # body.properties.extensions[0].typeHandlerVersion,
       body.properties.licenseProfile,
       body.properties.locationData,
       body.properties.locationData.city,
