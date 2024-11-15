@@ -37,20 +37,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
       }
       clientPublicKey = null
       cloudMetadata   = null
-      extensions = [
-        {
-          name = null
-          status = {
-            code          = null
-            displayStatus = null
-            level         = null
-            message       = null
-            time          = null
-          }
-          type               = null
-          typeHandlerVersion = null
-        }
-      ]
+      extensions = []
       licenseProfile = {
         esuProfile = {
           assignedLicense = {
@@ -121,15 +108,15 @@ resource "azapi_resource" "hybrid_compute_machine" {
       body.properties.clientPublicKey,
       body.properties.cloudMetadata,
       body.properties.extensions,
-      body.properties.extensions[*].name,
-      body.properties.extensions[*].status,
-      body.properties.extensions[*].status.code,
-      body.properties.extensions[*].status.displayStatus,
-      body.properties.extensions[*].status.level,
-      body.properties.extensions[*].status.message,
-      body.properties.extensions[*].status.time,
-      body.properties.extensions[*].type,
-      body.properties.extensions[*].typeHandlerVersion,
+      # body.properties.extensions[0].name,
+      # body.properties.extensions[0].status,
+      # body.properties.extensions[0].status.code,
+      # body.properties.extensions[0].status.displayStatus,
+      # body.properties.extensions[0].status.level,
+      # body.properties.extensions[0].status.message,
+      # body.properties.extensions[0].status.time,
+      # body.properties.extensions[0].type,
+      # body.properties.extensions[0].typeHandlerVersion,
       body.properties.licenseProfile,
       body.properties.locationData,
       body.properties.locationData.city,
