@@ -92,9 +92,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
           }
         }
       }
-      osType                     = null
-      parentClusterResourceId    = null
-      privateLinkScopeResourceId = null
+      osType = null
       serviceStatuses = {
         extensionService = {
           startupType = null
@@ -123,8 +121,21 @@ resource "azapi_resource" "hybrid_compute_machine" {
       body.properties.clientPublicKey,
       body.properties.cloudMetadata,
       body.properties.extensions,
+      body.properties.extensions[*].name,
+      body.properties.extensions[*].status,
+      body.properties.extensions[*].status.code,
+      body.properties.extensions[*].status.displayStatus,
+      body.properties.extensions[*].status.level,
+      body.properties.extensions[*].status.message,
+      body.properties.extensions[*].status.time,
+      body.properties.extensions[*].type,
+      body.properties.extensions[*].typeHandlerVersion,
       body.properties.licenseProfile,
       body.properties.locationData,
+      body.properties.locationData.city,
+      body.properties.locationData.countryOrRegion,
+      body.properties.locationData.district,
+      body.properties.locationData.name,
       body.properties.mssqlDiscovered,
       body.properties.osProfile,
       body.properties.osType,
