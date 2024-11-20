@@ -28,12 +28,12 @@ provider "azurerm" {
 
 locals {
   virtual_machines = {
-    vm1 = {
+    vm3 = {
       is_marketplace_image = true                               // Set to true if the referenced image is from Azure Marketplace.
       image_name           = "2022-datacenter-azure-edition-01" // Enter the name of the image you would like to use for the VM deployment.
       logical_network_name = "lnetstatic"                       // Enter the name of the logical network you would like to use for the VM deployment.
-    },
-    vm2 = {
+    }
+    vm4 = {
       is_marketplace_image = true
       image_name           = "win10-22h2-ent-g2-01"
       logical_network_name = "lnetstatic"
