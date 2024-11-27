@@ -59,8 +59,8 @@ locals {
       imageReference = {
         id = var.image_id
       }
-      dataDisks = [for i in range(length(var.data_disk_params)) : {
-        id = azapi_resource.data_disks[i].id
+      dataDisks = [for key, value in azapi_resource.data_disks : {
+        id = value.id
       }]
       osDisk = {
         osType = var.os_type
