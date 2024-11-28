@@ -36,7 +36,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
         enableAutomaticUpgrade = null
       }
       clientPublicKey = null
-      cloudMetadata   = null
       licenseProfile = {
         esuProfile = {
           licenseAssignmentState = null
@@ -84,7 +83,6 @@ resource "azapi_resource" "hybrid_compute_machine" {
     ignore_changes = [
       body.properties.agentUpgrade,
       body.properties.clientPublicKey,
-      body.properties.cloudMetadata,
       body.properties.extensions,
       body.properties.licenseProfile,
       body.properties.locationData,
