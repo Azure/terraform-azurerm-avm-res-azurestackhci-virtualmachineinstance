@@ -116,6 +116,14 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_disk_tags"></a> [disk\_tags](#input\_disk\_tags)
+
+Description: (Optional) Tags of the disk.
+
+Type: `map(string)`
+
+Default: `null`
+
 ### <a name="input_domain_join_extension_tags"></a> [domain\_join\_extension\_tags](#input\_domain\_join\_extension\_tags)
 
 Description: (Optional) Tags of the domain join extension.

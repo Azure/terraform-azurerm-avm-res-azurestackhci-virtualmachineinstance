@@ -16,4 +16,5 @@ resource "azapi_resource" "data_disks" {
   location  = var.location
   name      = each.value.name != "" ? each.value.name : "${var.name}dataDisk${format("%02d", index(var.data_disk_params, each.key) + 1)}"
   parent_id = data.azurerm_resource_group.rg.id
+  tags      = var.disk_tags
 }
