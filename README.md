@@ -116,6 +116,20 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_data_disk_tags"></a> [data\_disk\_tags](#input\_data\_disk\_tags)
+
+Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
+
+Type:
+
+```hcl
+map(object({
+    tags = map(string)
+  }))
+```
+
+Default: `{}`
+
 ### <a name="input_domain_join_extension_tags"></a> [domain\_join\_extension\_tags](#input\_domain\_join\_extension\_tags)
 
 Description: (Optional) Tags of the domain join extension.

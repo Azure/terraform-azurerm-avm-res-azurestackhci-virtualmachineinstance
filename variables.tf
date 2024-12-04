@@ -80,6 +80,14 @@ variable "data_disk_params" {
   description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
 }
 
+variable "data_disk_tags" {
+  type = map(object({
+    tags = map(string)
+  }))
+  default     = {}
+  description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
+}
+
 variable "domain_join_extension_tags" {
   type        = map(string)
   default     = null
