@@ -108,23 +108,11 @@ Type:
 
 ```hcl
 map(object({
-    name       = string
-    diskSizeGB = number
-    dynamic    = bool
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_data_disk_tags"></a> [data\_disk\_tags](#input\_data\_disk\_tags)
-
-Description: The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below.
-
-Type:
-
-```hcl
-map(object({
-    tags = map(string)
+    name        = string
+    diskSizeGB  = number
+    dynamic     = bool
+    tags        = map(string)
+    containerId = string
   }))
 ```
 
