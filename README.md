@@ -111,8 +111,8 @@ map(object({
     name        = string
     diskSizeGB  = number
     dynamic     = bool
-    tags        = map(string)
-    containerId = string
+    tags        = optional(map(string))
+    containerId = optional(string)
   }))
 ```
 
