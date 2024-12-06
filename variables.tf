@@ -76,7 +76,7 @@ variable "data_disk_params" {
     diskSizeGB  = number
     dynamic     = bool
     tags        = map(string)
-    containerId = string
+    containerId = optional(string)
   }))
   default     = {}
   description = "The array description of the dataDisks to attach to the vm. Provide an empty array for no additional disks, or an array following the example below."
