@@ -8,12 +8,13 @@ resource "azapi_resource" "data_disks" {
       type = "CustomLocation"
     }
     properties = {
-      diskSizeGB = each.value.diskSizeGB
-      dynamic    = each.value.dynamic
-      # containerId: uncomment if you want to target a specific CSV/storage path in your HCI cluster
+      diskSizeGB  = each.value.diskSizeGB
+      dynamic     = each.value.dynamic
+      containerId = each.value.containerId
     }
   }
   location  = var.location
   name      = each.value.name != "" ? each.value.name : "${var.name}dataDisk${format("%02d", index(var.data_disk_params, each.key) + 1)}"
   parent_id = data.azurerm_resource_group.rg.id
+  tags      = each.value.tags
 }

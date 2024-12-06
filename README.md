@@ -108,9 +108,11 @@ Type:
 
 ```hcl
 map(object({
-    name       = string
-    diskSizeGB = number
-    dynamic    = bool
+    name        = string
+    diskSizeGB  = number
+    dynamic     = bool
+    tags        = optional(map(string))
+    containerId = optional(string)
   }))
 ```
 
