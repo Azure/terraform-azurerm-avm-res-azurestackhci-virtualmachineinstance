@@ -75,7 +75,7 @@ variable "data_disk_params" {
     name        = string
     diskSizeGB  = number
     dynamic     = bool
-    tags        = map(string)
+    tags        = optional(map(string))
     containerId = optional(string)
   }))
   default     = {}
