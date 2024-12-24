@@ -36,7 +36,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
         enableAutomaticUpgrade = null
       }
       clientPublicKey = null
-      cloudMetadata = {}
+      cloudMetadata   = {}
       licenseProfile = {
         esuProfile = {
           licenseAssignmentState = null
