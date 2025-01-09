@@ -11,16 +11,23 @@ locals {
   }
   dynamic_memory_config_omit_null    = { for k, v in local.dynamic_memory_config_full : k => v if v != null }
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
+  virtual_machine_osProfile = {
+    computerName = var.name
+    linuxConfiguration = {
+      ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
+    }
+    windowsConfiguration = {
+      provisionVMAgent       = true
+      provisionVMConfigAgent = true
+      ssh                    = var.windows_ssh_config == null ? {} : var.windows_ssh_config
+    }
+    adminUsername = var.admin_username
+    adminPassword = var.admin_password
+  }
   virtual_machine_properties_all = merge(
-    local.virtual_machine_properties_omit_null,
+    nonsensitive(local.virtual_machine_properties_omit_null),
     {
-      osProfile = merge(
-        local.virtual_machine_properties_omit_null.osProfile,
-        {
-          adminUsername = var.admin_username,
-          adminPassword = var.admin_password,
-        }
-      )
+      osProfile = local.virtual_machine_osProfile
     }
   )
   virtual_machine_properties_omit_null = { for key, value in local.virtual_machine_properties_without_auth : key => value if value != null }
@@ -36,18 +43,6 @@ locals {
       httpsProxy = var.https_proxy
       noProxy    = var.no_proxy
       trustedCa  = var.trusted_ca
-    }
-    osProfile = {
-      # Exclude sensitive fields
-      computerName = var.name
-      linuxConfiguration = {
-        ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
-      }
-      windowsConfiguration = {
-        provisionVMAgent       = true
-        provisionVMConfigAgent = true
-        ssh                    = var.windows_ssh_config == null ? {} : var.windows_ssh_config
-      }
     }
     securityProfile = {
       uefiSettings = {
