@@ -75,45 +75,30 @@ data "azapi_resource" "logical_network" {
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
 module "test" {
-  source = "../../"
-  # source             = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
-  # version            = "~>0.0"
-
+  source   = "../../"
   for_each = local.virtual_machines
 
-  enable_telemetry    = var.enable_telemetry
-  resource_group_name = var.resource_group_name
-  location            = data.azurerm_resource_group.rg.location
-  custom_location_id  = data.azapi_resource.customlocation.id
-  name                = each.key
-  image_id            = data.azapi_resource.vm_image[each.key].id
-  logical_network_id  = data.azapi_resource.logical_network[each.key].id
-
-  admin_username        = var.vm_admin_username
   admin_password        = var.vm_admin_password
-  v_cpu_count           = var.v_cpu_count
-  memory_mb             = var.memory_mb
+  admin_username        = var.vm_admin_username
+  custom_location_id    = data.azapi_resource.customlocation.id
+  image_id              = data.azapi_resource.vm_image[each.key].id
+  location              = data.azurerm_resource_group.rg.location
+  logical_network_id    = data.azapi_resource.logical_network[each.key].id
+  name                  = each.key
+  resource_group_name   = var.resource_group_name
+  data_disk_params      = var.data_disk_params
+  domain_join_password  = var.domain_join_password
+  domain_join_user_name = var.domain_join_user_name
+  domain_target_ou      = var.domain_target_ou
+  domain_to_join        = var.domain_to_join
   dynamic_memory        = var.dynamic_memory
+  dynamic_memory_buffer = var.dynamic_memory_buffer
   dynamic_memory_max    = var.dynamic_memory_max
   dynamic_memory_min    = var.dynamic_memory_min
-  dynamic_memory_buffer = var.dynamic_memory_buffer
-  data_disk_params      = var.data_disk_params
+  enable_telemetry      = var.enable_telemetry
+  memory_mb             = var.memory_mb
   private_ip_address    = var.private_ip_address
-  domain_to_join        = var.domain_to_join
-  domain_target_ou      = var.domain_target_ou
-  domain_join_user_name = var.domain_join_user_name
-  domain_join_password  = var.domain_join_password
-
-
-  # # Optional block to configure a proxy server for your VM
-  # http_proxy = "http://username:password@proxyserver.contoso.com:3128"
-  # https_proxy = "https://username:password@proxyserver.contoso.com:3128"
-  # no_proxy = [
-  #     "localhost",
-  #     "127.0.0.1"
-  # ]
-  # trusted_ca = "-----BEGIN CERTIFICATE-----....-----END CERTIFICATE-----"
-
+  v_cpu_count           = var.v_cpu_count
 }
 ```
 
