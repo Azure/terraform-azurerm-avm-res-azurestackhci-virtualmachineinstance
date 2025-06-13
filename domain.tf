@@ -1,7 +1,10 @@
 resource "azapi_resource" "domain_join" {
   count = length(var.domain_to_join) > 0 ? 1 : 0
 
-  type = "Microsoft.HybridCompute/machines/extensions@2023-10-03-preview"
+  location  = var.location
+  name      = "domainJoinExtension"
+  parent_id = azapi_resource.hybrid_compute_machine.id
+  type      = "Microsoft.HybridCompute/machines/extensions@2023-10-03-preview"
   body = {
     properties = {
       publisher               = "Microsoft.Compute"
@@ -20,10 +23,7 @@ resource "azapi_resource" "domain_join" {
       }
     }
   }
-  location  = var.location
-  name      = "domainJoinExtension"
-  parent_id = azapi_resource.hybrid_compute_machine.id
-  tags      = var.domain_join_extension_tags
+  tags = var.domain_join_extension_tags
 
   depends_on = [
     azapi_resource.virtual_machine
