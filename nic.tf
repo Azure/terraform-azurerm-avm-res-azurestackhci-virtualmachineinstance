@@ -1,5 +1,8 @@
 resource "azapi_resource" "nic" {
-  type = "Microsoft.AzureStackHCI/networkInterfaces@2023-09-01-preview"
+  location  = var.location
+  name      = "${var.name}-nic"
+  parent_id = data.azurerm_resource_group.rg.id
+  type      = "Microsoft.AzureStackHCI/networkInterfaces@2023-09-01-preview"
   body = {
     extendedLocation = {
       type = "CustomLocation"
@@ -18,10 +21,7 @@ resource "azapi_resource" "nic" {
       macAddress = null
     }
   }
-  location  = var.location
-  name      = "${var.name}-nic"
-  parent_id = data.azurerm_resource_group.rg.id
-  tags      = var.nic_tags
+  tags = var.nic_tags
 
   lifecycle {
     ignore_changes = [
