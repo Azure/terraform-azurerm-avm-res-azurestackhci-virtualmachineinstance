@@ -26,7 +26,10 @@ resource "azurerm_role_assignment" "this" {
 }
 
 resource "azapi_resource" "hybrid_compute_machine" {
-  type = "Microsoft.HybridCompute/machines@2023-10-03-preview"
+  location  = var.location
+  name      = var.name
+  parent_id = data.azurerm_resource_group.rg.id
+  type      = "Microsoft.HybridCompute/machines@2023-10-03-preview"
   body = {
     kind = "HCI",
     properties = {
@@ -71,10 +74,7 @@ resource "azapi_resource" "hybrid_compute_machine" {
       vmId = null
     }
   }
-  location  = var.location
-  name      = var.name
-  parent_id = data.azurerm_resource_group.rg.id
-  tags      = var.tags
+  tags = var.tags
 
   identity {
     type = "SystemAssigned"
@@ -105,7 +105,9 @@ resource "azapi_resource" "hybrid_compute_machine" {
 }
 
 resource "azapi_resource" "virtual_machine" {
-  type = "Microsoft.AzureStackHCI/virtualMachineInstances@2023-09-01-preview"
+  name      = "default" # value must be 'default' per 2023-09-01-preview
+  parent_id = azapi_resource.hybrid_compute_machine.id
+  type      = "Microsoft.AzureStackHCI/virtualMachineInstances@2023-09-01-preview"
   body = {
     extendedLocation = {
       type = "CustomLocation"
@@ -113,8 +115,6 @@ resource "azapi_resource" "virtual_machine" {
     }
     properties = local.virtual_machine_properties_all
   }
-  name      = "default" # value must be 'default' per 2023-09-01-preview
-  parent_id = azapi_resource.hybrid_compute_machine.id
 
   timeouts {
     create = "2h"
