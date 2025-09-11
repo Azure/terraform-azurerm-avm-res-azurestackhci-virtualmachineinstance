@@ -311,3 +311,21 @@ variable "windows_ssh_config" {
   default     = null
   description = "SSH configuration with public keys for windows."
 }
+
+variable "security_type" {
+  type        = string
+  default     = null
+  description = "Specifies the SecurityType of the virtual machine. EnableTPM and SecureBootEnabled must be set to true for SecurityType to function.. Possible values are 'TrustedLaunch' and 'ConfidentialVM'."
+
+  validation {
+    condition     = var.security_type == null || contains(["TrustedLaunch", "ConfidentialVM"], var.security_type)
+    error_message = "The security_type must be one of: 'TrustedLaunch', 'ConfidentialVM', or null."
+  }
+}
+
+
+variable "enable_tpm" {
+  type        = bool
+  default     = false
+  description = "Enable TPM flag"
+}
