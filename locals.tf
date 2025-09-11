@@ -46,7 +46,7 @@ locals {
     }
     securityProfile = {
       security_type = var.security_type
-      enable_tpm = var.enable_tpm
+      enable_tpm    = var.enable_tpm
       uefiSettings = {
         secureBootEnabled = var.secure_boot_enabled
       }
