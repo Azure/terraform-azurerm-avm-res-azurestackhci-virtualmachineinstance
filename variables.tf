@@ -22,6 +22,7 @@ variable "admin_username" {
 variable "custom_data" {
   type        = string
   description = "The custom data foro the Azure Stack HCI virtual machine. This should be a base64 encoded string."
+  default     = ""
 }
 
 variable "custom_location_id" {
