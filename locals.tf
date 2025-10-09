@@ -13,7 +13,7 @@ locals {
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
   virtual_machine_osProfile = {
     computerName = var.name
-    customData = var.custom_data
+    customData   = var.custom_data
     linuxConfiguration = {
       ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
     }
