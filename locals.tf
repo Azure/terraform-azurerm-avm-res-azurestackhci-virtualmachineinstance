@@ -38,8 +38,7 @@ locals {
         processors = var.v_cpu_count
         memoryMB   = var.memory_mb
       },
-
-      #dynamicMemoryConfig = length(keys(local.dynamic_memory_config_omit_null)) == 0 ? {} : local.dynamic_memory_config_omit_null
+      
       var.dynamic_memory == false ? {} : {
         dynamicMemoryConfig = local.dynamic_memory_config_omit_null
       }
