@@ -96,7 +96,7 @@ module "test" {
   dynamic_memory_buffer = var.dynamic_memory_buffer
   dynamic_memory_max    = var.dynamic_memory_max
   dynamic_memory_min    = var.dynamic_memory_min
-  enable_telemetry      = false
+  enable_telemetry      = var.enable_telemetry
   memory_mb             = var.memory_mb
   private_ip_address    = var.private_ip_address
   v_cpu_count           = var.v_cpu_count
@@ -238,7 +238,7 @@ If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
 
-Default: `true`
+Default: `false`
 
 ### <a name="input_memory_mb"></a> [memory\_mb](#input\_memory\_mb)
 
