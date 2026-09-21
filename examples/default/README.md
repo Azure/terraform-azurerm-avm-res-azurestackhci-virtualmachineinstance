@@ -236,7 +236,7 @@ If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
 
-Default: `false`
+Default: `true`
 
 ### <a name="input_is_marketplace_image"></a> [is\_marketplace\_image](#input\_is\_marketplace\_image)
 
