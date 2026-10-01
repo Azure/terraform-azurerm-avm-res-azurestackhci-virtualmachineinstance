@@ -71,7 +71,6 @@ data "azapi_resource" "logical_network" {
   type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
 }
 
-
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
