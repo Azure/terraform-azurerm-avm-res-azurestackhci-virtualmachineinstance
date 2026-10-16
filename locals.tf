@@ -14,6 +14,8 @@ locals {
   virtual_machine_osProfile = {
     computerName = var.name
     linuxConfiguration = {
+      provisionVMAgent = true
+      provisionVMConfigAgent = true
       ssh = var.linux_ssh_config == null ? {} : var.linux_ssh_config
     }
     windowsConfiguration = {
